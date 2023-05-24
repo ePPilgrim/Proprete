@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace Proprete.Data.Tables
+namespace DataLayer.Models
 {
     public class Location
     {
@@ -12,10 +12,5 @@ namespace Proprete.Data.Tables
         [Required]
         [MaxLength(50)]
         public string LocationName { get; set; } 
-
-        public Location(string locationName)
-        {
-            LocationName = locationName;
-        }
     }
 }

@@ -4,11 +4,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.Models
 {
-    public class OffWarehouse
+    public class SubWarehouse
     {
         public int LocationID { get; set; }
         public int ItemID { get; set; }
         public DateTime DateTime { get; set; }
+        public int Count { get; set; }
 
         [ForeignKey("LocationID")]
         [Required]

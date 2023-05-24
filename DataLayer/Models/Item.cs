@@ -1,15 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DataLayer.Common;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Proprete.Data.Tables
+namespace DataLayer.Models
 {
-    public enum ItemType
-    {
-        Floor,
-        Window,
-        Dish
-    }
-
     public class Item
     {
         [Key]
@@ -19,11 +13,9 @@ namespace Proprete.Data.Tables
         [Required]
         [MaxLength(50)]
         public string ItemName { get; set; }
+
+        [Required]
         public ItemType Type { get; set; }
-        public Item(string itemName, ItemType type) {
-            ItemName = itemName; 
-            Type = type;
-        }
 
     }
 }

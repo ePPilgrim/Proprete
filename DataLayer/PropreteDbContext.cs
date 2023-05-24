@@ -1,7 +1,7 @@
 ﻿using DataLayer.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace ModelLayer
+namespace DataLayer
 {
     public class PropreteDbContext : DbContext
     {
@@ -13,9 +13,9 @@ namespace ModelLayer
                 .HasKey(k => new { k.ItemID, k.DateTime });
             modelBuilder.Entity<Warehouse>()
                 .HasIndex(k => new { k.ItemID, k.DateTime });
-            modelBuilder.Entity<OffWarehouse>()
+            modelBuilder.Entity<SubWarehouse>()
                 .HasKey(k => new { k.LocationID, k.ItemID, k.DateTime });
-            modelBuilder.Entity<OffWarehouse>()
+            modelBuilder.Entity<SubWarehouse>()
                 .HasIndex(k => new { k.LocationID, k.ItemID, k.DateTime })
                 .IsUnique();
 
