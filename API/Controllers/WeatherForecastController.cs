@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Service.Controllers
+namespace Proprette.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]

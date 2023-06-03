@@ -1,8 +1,8 @@
-﻿using DataLayer.Common;
+﻿using Proprette.Domain.Common;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DataLayer.Models
+namespace Proprette.Domain.Models
 {
     public class Item
     {
@@ -10,12 +10,14 @@ namespace DataLayer.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ItemID { get; set; }
 
-        [Required]
         [MaxLength(50)]
         public string ItemName { get; set; }
+        public ItemType ItemType { get; set; }
 
-        [Required]
-        public ItemType Type { get; set; }
+        public Item(string itemName)
+        {
+            ItemName = itemName;
+        }
 
     }
 }

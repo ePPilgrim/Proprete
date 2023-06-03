@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace DataLayer.Models
+namespace Proprette.Domain.Models
 {
     public class Location
     {
@@ -9,8 +9,12 @@ namespace DataLayer.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int LocationID { get; set; }
 
-        [Required]
         [MaxLength(50)]
-        public string LocationName { get; set; } 
+        public string LocationName { get; set; }
+
+        public Location(string locationName)
+        {
+            LocationName = locationName;
+        }
     }
 }

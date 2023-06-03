@@ -1,8 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 
-namespace DataLayer.Models
+namespace Proprette.Domain.Models
 {
     public class SubWarehouse
     {
@@ -12,11 +11,15 @@ namespace DataLayer.Models
         public int Count { get; set; }
 
         [ForeignKey("LocationID")]
-        [Required]
         public Location Location { get; set;}
 
         [ForeignKey("ItemID")]
-        [Required]
         public Item Item{ get; set; }
+
+        public SubWarehouse(Location location, Item item)
+        {
+            Location = location;
+            Item = item;
+        }
     }
 }

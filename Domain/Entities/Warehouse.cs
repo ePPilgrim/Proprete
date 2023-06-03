@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 
-namespace DataLayer.Models
+namespace Proprette.Domain.Models
 {
     public class Warehouse
     {
@@ -10,7 +9,11 @@ namespace DataLayer.Models
         public int Count { get; set; }
 
         [ForeignKey("ItemID")]
-        [Required]
         public Item Item { get; set; }
+
+        public Warehouse(Item item)
+        {
+            Item = item;
+        }
     }
 }
