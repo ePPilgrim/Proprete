@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Proprette.API.Models;
+using Proprette.Domain.Models;
 using Proprette.DataSeeding;
-using Proprette.Domain.Service;
+using Proprette.Domain.Services;
 
 Console.WriteLine("Input file name:");
-var filePath = Console.ReadLine();
+//var filePath = Console.ReadLine();
+string filePath = "proba.csv";
 if(filePath == null)
 {
     throw new ArgumentNullException(nameof(filePath));
@@ -20,13 +21,18 @@ switch (Console.ReadLine())
 {
     case "r":
         var dbContexOptionsBuilder = new DbContextOptionsBuilder<PropretteDbContext>();
-        dbContexOptionsBuilder.UseSqlite("Data Source=C:\\Users\\demyd\\Practice\\Proprete\\Service\\Proprete.db", b => b.MigrationsAssembly("Service"));
-        var dbContext = new PropretteDbContext(dbContexOptionsBuilder.Options);
+        dbContexOptionsBuilder.UseSqlite("Data Source=C:\\Users\\demyd\\Practice\\Proprette\\API\\Proprette.db", b => b.MigrationsAssembly("Service"));
         var obj = csvFile.Read().ToList();
 
+        using (var dbContext = new PropretteDbContext(dbContexOptionsBuilder.Options))
+        {
+            var serv = new PopulateTable(dbContext);
+            var res = serv.PopulateWarehouse(obj.Take(3));
+            res.Wait();
+        }
 
-        //dbContext.Add(new Location { LocationName = "Prague0" });
-        dbContext.SaveChanges();
+            //dbContext.Add(new Location { LocationName = "Prague0" });
+            //dbContext.SaveChanges();
         
         break;
     case "w":

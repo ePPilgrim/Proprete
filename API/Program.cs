@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Proprette.Domain;
 using Proprette.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);

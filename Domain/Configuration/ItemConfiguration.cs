@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Proprette.Domain.Models;
+using Proprette.Domain.Entities;
 
 namespace Proprette.Domain.Configuration
 {

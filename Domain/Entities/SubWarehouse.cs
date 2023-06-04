@@ -1,25 +1,29 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
 
-namespace Proprette.Domain.Models
+namespace Proprette.Domain.Entities;
+
+public class SubWarehouse
 {
-    public class SubWarehouse
+    public int LocationID { get; set; }
+    public int ItemID { get; set; }
+    public DateTime DateTime { get; set; }
+    public int Count { get; set; }
+
+    [ForeignKey("LocationID")]
+    public Location Location { get; set;}
+
+    [ForeignKey("ItemID")]
+    public Item Item{ get; set; }
+
+    public SubWarehouse(Location location, Item item)
     {
-        public int LocationID { get; set; }
-        public int ItemID { get; set; }
-        public DateTime DateTime { get; set; }
-        public int Count { get; set; }
+        Location = location;
+        Item = item;
+    }
 
-        [ForeignKey("LocationID")]
-        public Location Location { get; set;}
+    private SubWarehouse() : this(null!, null!)
+    {
 
-        [ForeignKey("ItemID")]
-        public Item Item{ get; set; }
-
-        public SubWarehouse(Location location, Item item)
-        {
-            Location = location;
-            Item = item;
-        }
     }
 }

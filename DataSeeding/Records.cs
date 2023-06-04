@@ -1,5 +1,5 @@
-﻿using Proprette.API.Models;
-using Proprette.Domain.Common;
+﻿using Proprette.Domain.Common;
+using Proprette.Domain.Models;
 
 namespace Proprette.DataSeeding;
 internal class Records
@@ -7,10 +7,10 @@ internal class Records
     private readonly List<WarehouseDto> _warehouse = new List<WarehouseDto>
         {
             new WarehouseDto("Wanish", ItemType.Floor, new DateTime(2023, 01, 01), 10),
-            new WarehouseDto("Wanish", ItemType.Window, new DateTime(2023, 01, 01), 9),
-            new WarehouseDto("Wanish", ItemType.Ceil, new DateTime(2023, 01, 01), 8),
             new WarehouseDto("Wanish", ItemType.Floor, new DateTime(2023, 02, 01), 7),
+            new WarehouseDto("Wanish", ItemType.Window, new DateTime(2023, 01, 01), 9),
             new WarehouseDto("Wanish", ItemType.Window, new DateTime(2023, 02, 01), 6),
+            new WarehouseDto("Wanish", ItemType.Ceil, new DateTime(2023, 01, 01), 8),
             new WarehouseDto("Wanish", ItemType.Ceil, new DateTime(2023, 02, 01), 5),
 
             new WarehouseDto("Domestos", ItemType.Floor, new DateTime(2023, 01, 01), 20),
