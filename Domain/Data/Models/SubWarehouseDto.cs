@@ -1,6 +1,6 @@
-﻿using Proprette.Domain.Common;
+﻿using Proprette.Domain.Data.Common;
 
-namespace Proprette.Domain.Models;
+namespace Proprette.Domain.Data.Models;
 
 public class SubWarehouseDto
 {

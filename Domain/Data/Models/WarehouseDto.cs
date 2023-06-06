@@ -1,12 +1,13 @@
-﻿using Proprette.Domain.Common;
+﻿using Proprette.Domain.Data.Common;
 
-namespace Proprette.Domain.Models;
+namespace Proprette.Domain.Data.Models;
 public class WarehouseDto
 {
     public string ItemName { get; set; }
     public ItemType ItemType { get; set; }
     public DateTime DateTime { get; set; }
     public int Count { get; set; }
+    public int ItemID { get; set; } = 0;
 
     public WarehouseDto(string itemName, ItemType itemType, DateTime dateTime, int count)
     {
@@ -15,5 +16,7 @@ public class WarehouseDto
         DateTime = dateTime;
         Count = count;
     }
+
+    public WarehouseDto() { }   
 }
 

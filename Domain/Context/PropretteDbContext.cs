@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Proprette.Domain.Services;
+namespace Proprette.Domain.Context;
 
 public class PropretteDbContext : DbContext
 {

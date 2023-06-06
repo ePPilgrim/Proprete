@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Proprette.Domain.Entities;
+namespace Proprette.Domain.Data.Entities;
 
 public class Warehouse
 {

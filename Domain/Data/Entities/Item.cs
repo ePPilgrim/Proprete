@@ -1,8 +1,8 @@
-﻿using Proprette.Domain.Common;
+﻿using Proprette.Domain.Data.Common;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Proprette.Domain.Entities;
+namespace Proprette.Domain.Data.Entities;
 
 public class Item
 {

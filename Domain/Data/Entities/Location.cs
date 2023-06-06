@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace Proprette.Domain.Entities;
+namespace Proprette.Domain.Data.Entities;
 
 public class Location
 {
