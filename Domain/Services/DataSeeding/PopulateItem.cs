@@ -1,58 +1,65 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Proprette.Domain.Context;
 using Proprette.Domain.Data.Entities;
+using Proprette.Domain.Data.Internals;
 using Proprette.Domain.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.Immutable;
 
 namespace Proprette.Domain.Services.DataSeeding;
 
 public class PopulateItem : IPopulateTable
 {
     private readonly PropretteDbContext context;
+    private readonly HashSet<InternalItem> itemSet;
 
 
-    public PopulateItem(PropretteDbContext dbContext)
+    public PopulateItem(PropretteDbContext dbContext, IList<WarehouseDto> records)
     {
         context = dbContext ?? throw new ArgumentNullException("context");
+        itemSet = records.Select(el => GetInternalItem(el)).ToHashSet(new ComparerAltKeys<InternalItem>());
     }
+
     public async Task Delete()
     {
         context.RemoveRange(context.Set<Item>());
         await context.SaveChangesAsync();
     }
 
-    public Task UpdateOrInsert(IList<WarehouseDto> items)
+    public async Task UpdateOrInsert()
     {
-        var mapping = items
-            .GroupBy(el => new { el.ItemName, el.ItemType })
-            .Select(el => new { el.Key, Value = el.First() })
-            .ToDictionary(el => el.Key, el => el.Value);
-        var itemNameKeys = mapping.Keys.Select(el => el.ItemName).ToHashSet();
-        var itemTypeKeys = mapping.Keys.Select(el => el.ItemType).ToHashSet();
+        var itemNameKeys = itemSet.Select(el => el.ItemName).ToHashSet();
+        var itemTypeKeys = itemSet.Select(el => el.ItemType).ToHashSet();
 
-        var baseQuery = context.Set<Item>().TagWith("PopulateTable->InsertItems():")
+        var rows = await context.Set<Item>().TagWith("PopulateItem->UpdateOrInsert():")
             .AsNoTracking()
-            .Where(x => itemNameKeys.Contains(x.ItemName) && itemTypeKeys.Contains(x.ItemType));
+            .Where(x => itemNameKeys.Contains(x.ItemName) && itemTypeKeys.Contains(x.ItemType))
+            .Select(x => new { x.ItemName, x.ItemType })
+            .ToListAsync();
 
-        var rowsAsync = await baseQuery.ToListAsync();
-
-        var rows = rowsAsync
-            .Where(el => mapping.Keys.Contains(new { el.ItemName, el.ItemType }))
-            .ToDictionary(el => new { el.ItemName, el.ItemType }, el => el);
-
-        var toadd = mapping.Where(el => !rows.ContainsKey(el.Key)).Select(el => new Item(el.Value.ItemName)
-        {
-            ItemType = el.Value.ItemType
-        }).ToList();
+        var hashVals = rows.Select(el=>HashCodeHelper.Get(el.ItemName, el.ItemType));
+        var toadd = itemSet
+            .Where(el => !hashVals.Contains(HashCodeHelper.Get(el.ItemName, el.ItemType)))
+            .Select(el => new Item(el.ItemName, el.ItemType))
+            .ToList();
 
         if (toadd.Any())
         {
             await context.Set<Item>().AddRangeAsync(toadd);
             await context.SaveChangesAsync();
         }
+    }
+
+    private InternalItem GetInternalItem(WarehouseDto obj)
+    {
+        return new InternalItem(obj.ItemName, obj.ItemType)
+        {
+            ItemID = 0,
+            Item = new Item(obj.ItemName, obj.ItemType)
+            {
+                ItemName = obj.ItemName,
+                ItemType = obj.ItemType,
+                ItemID = 0
+            }
+        };
     }
 }

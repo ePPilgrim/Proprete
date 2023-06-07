@@ -7,7 +7,6 @@ public class WarehouseDto
     public ItemType ItemType { get; set; }
     public DateTime DateTime { get; set; }
     public int Count { get; set; }
-    public int ItemID { get; set; } = 0;
 
     public WarehouseDto(string itemName, ItemType itemType, DateTime dateTime, int count)
     {

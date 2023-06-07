@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Proprette.Domain.Models;
+using Proprette.Domain.Data.Models;
 using Proprette.DataSeeding;
-using Proprette.Domain.Services;
+using Proprette.Domain.Services.DataSeeding;
 using Microsoft.Extensions.Logging;
+using Proprette.Domain.Context;
 
 Console.WriteLine("Input file name:");
 //var filePath = Console.ReadLine();
@@ -13,7 +14,7 @@ if(filePath == null)
 }
 var csvFile = new CsvFile<WarehouseDto>(filePath);
 var memoryDataLayer = new Records();
-
+var obj = csvFile.Read().ToList();
 
 // Configure logging
 var loggerFactory = LoggerFactory.Create(builder =>
@@ -35,26 +36,20 @@ Console.WriteLine("\tw - write from memory to file");
 switch (Console.ReadLine())
 {
     case "i":
-        var obj = csvFile.Read().ToList();
-        using (var dbContext = new PropretteDbContext(dbContexOptionsBuilder.Options))
-        {
-            var serv = new PopulateTable(dbContext);
-            var res = serv.InsertItems(obj);
-            res.Wait();
-        }
+        //var obj = csvFile.Read().ToList();
+        //using (var dbContext = new PropretteDbContext(dbContexOptionsBuilder.Options))
+        //{
+        //    var serv = new PopulateTable(dbContext);
+        //    var res = serv.InsertItems(obj);
+        //    res.Wait();
+        //}
         break;
     case "r":
-
-        obj = csvFile.Read().ToList();
         using (var dbContext = new PropretteDbContext(dbContexOptionsBuilder.Options))
         {
-            var serv = new PopulateTable(dbContext);
-            var res = serv.InsertItems(obj);
+            var serv = new PopulateItem(dbContext, obj);
+            var res = serv.UpdateOrInsert();
             res.Wait();
-            serv.PopulateWarehouse(obj);
-            //var res = 
-            //serv.Insert(obj);
-            //res.Wait();
         }
         //using (var dbContext = new PropretteDbContext(dbContexOptionsBuilder.Options))
         //{
@@ -79,7 +74,7 @@ switch (Console.ReadLine())
 
         using (var dbContext = new PropretteDbContext(dbContexOptionsBuilder.Options))
         {
-            var serv = new PopulateTable(dbContext);
+            var serv = new PopulateItem(dbContext, obj);
             var res = serv.Delete();
             res.Wait();
         }

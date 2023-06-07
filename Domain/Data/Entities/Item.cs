@@ -14,9 +14,10 @@ public class Item
     public string ItemName { get; set; }
     public ItemType ItemType { get; set; }
 
-    public Item(string itemName)
+    public Item(string itemName, ItemType itemType)
     {
         ItemName = itemName;
+        ItemType = itemType;
     }
 
 }

@@ -1,5 +1,5 @@
-﻿using Proprette.Domain.Common;
-using Proprette.Domain.Models;
+﻿using Proprette.Domain.Data.Common;
+using Proprette.Domain.Data .Models;
 
 namespace Proprette.DataSeeding;
 internal class Records
