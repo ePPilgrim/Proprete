@@ -1,7 +1,8 @@
 ﻿namespace Proprette.Domain.Services.DataSeeding;
 
-public interface IPopulateTable
+interface IPopulateTable<in T> where T : class
 {
-    Task UpdateOrInsert();
+    Task UpdateOrInsert(IEnumerable<T> records);
+    Task Insert(IEnumerable<T> records);
     Task Delete();
 }

@@ -8,4 +8,9 @@ static internal class HashCodeHelper
     {
         return new { name = a1, type = a2 }.GetHashCode();
     }
+
+    internal static int Get(int itemID, DateTime dateTime)
+    {
+        return new {id = itemID, dateTime = dateTime}.GetHashCode();
+    }
 }

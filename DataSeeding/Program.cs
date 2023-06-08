@@ -47,7 +47,13 @@ switch (Console.ReadLine())
     case "r":
         using (var dbContext = new PropretteDbContext(dbContexOptionsBuilder.Options))
         {
-            var serv = new PopulateItem(dbContext, obj);
+            var serv = new PopulateItemByOrder(dbContext, obj.Take(3).ToList());
+            var res = serv.UpdateOrInsert();
+            res.Wait();
+        }
+        using (var dbContext = new PropretteDbContext(dbContexOptionsBuilder.Options))
+        {
+            var serv = new PopulateItemByOrder(dbContext, obj);
             var res = serv.UpdateOrInsert();
             res.Wait();
         }
@@ -74,7 +80,7 @@ switch (Console.ReadLine())
 
         using (var dbContext = new PropretteDbContext(dbContexOptionsBuilder.Options))
         {
-            var serv = new PopulateItem(dbContext, obj);
+            var serv = new PopulateItemByOrder(dbContext, obj);
             var res = serv.Delete();
             res.Wait();
         }
