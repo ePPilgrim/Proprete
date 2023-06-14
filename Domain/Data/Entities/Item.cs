@@ -20,4 +20,14 @@ public class Item
         ItemType = itemType;
     }
 
+    public Item(Item item)
+    {
+        ItemID = item.ItemID;
+        ItemName = item.ItemName;
+        ItemType = item.ItemType;   
+    }
+
+    private Item() : this(null!, ItemType.None) { }
+    
+
 }

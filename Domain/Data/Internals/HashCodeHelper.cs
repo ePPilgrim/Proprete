@@ -11,6 +11,11 @@ static internal class HashCodeHelper
 
     internal static int Get(int itemID, DateTime dateTime)
     {
-        return new {id = itemID, dateTime = dateTime}.GetHashCode();
+        return new {id = itemID, datetime = dateTime }.GetHashCode();
+    }
+
+    internal static int Get(string itemName, ItemType itemType, DateTime dateTime)
+    {
+        return new {name = itemName, type = itemType, datetime = dateTime}.GetHashCode();
     }
 }

@@ -5,15 +5,18 @@ using Proprette.Domain.Data.Internals;
 
 namespace Proprette.Domain.Services.DataSeeding.Internal;
 
-internal class PopulateWarehouseInternal : IPopulateTable<WarehouseInternal>
+internal class PopulateWarehouseInternal : IPopulateTableInternal<Warehouse>
 {
     private readonly PropretteDbContext context;
-    private readonly IPopulateTable<ItemInternal> itemTable;
+    private readonly IPopulateTableInternal<Item> itemTable;
+    private readonly IEntityFactory<Item> entityFactory;    
 
-    public PopulateWarehouseInternal(PropretteDbContext dbContext, IPopulateTable<ItemInternal> items)
+    public PopulateWarehouseInternal(PropretteDbContext context,
+        IEntityFactory<Item> entityFactory)
     {
-        context = dbContext ?? throw new ArgumentNullException("dbContext");
-        itemTable = items;
+        this.context = context;
+        this.itemTable = entityFactory.CreatePopulateInternal();
+        this.entityFactory = entityFactory;
     }
 
     public async Task Delete()
@@ -21,62 +24,63 @@ internal class PopulateWarehouseInternal : IPopulateTable<WarehouseInternal>
         await itemTable.Delete();
     }
 
-    public async Task Insert(IEnumerable<WarehouseInternal> records)
+    public async Task Insert(IDBCollection<Warehouse> records)
     {
-        if (records.Any())
+        if (records.Values.Any())
         {
-            await context.Set<Warehouse>().AddRangeAsync(records.Select(el => el.Warehouse).ToList());
+            await context.Set<Warehouse>().AddRangeAsync(records.Values);
             await context.SaveChangesAsync();
         }
     }
 
-    public async Task UpdateOrInsert(IEnumerable<WarehouseInternal> records)
+    public async Task UpdateOrInsert(IDBCollection<Warehouse> records)
     {
-        await itemTable.UpdateOrInsert(records.Select(el => new ItemInternal(el.Warehouse.Item)));
-        var itemNameKeys = records.Select(el=>el.ItemName).ToHashSet();
-        var itemTypeKeys = records.Select(el=>el.ItemType).ToHashSet();
-        var itemCombKeys = records.Select(el=>HashCodeHelper.Get(el.ItemName, el.ItemType)).ToHashSet();
+        var itemRecords = records.GetItems() ?? throw new NullReferenceException($"No Item properties could be fetch from {nameof(records)}");
+        await itemTable.UpdateOrInsert(entityFactory.CreateCollectionDeep(itemRecords.Values));
+        var itemNameKeys = itemRecords.GetItemNameKeys();
+        var itemTypeKeys = itemRecords.GetItemTypeKeys();
 
-        var itemMapAsync = await context.Set<Item>()
+        var itemMapAsync= await context.Set<Item>()
             .TagWith("PopulateWarehouseInternal->UpdateOrInsert()->1:")
             .AsNoTracking()
             .Where(el => itemNameKeys.Contains(el.ItemName) && itemTypeKeys.Contains(el.ItemType))
+            .Select(el => new {el.ItemName, el.ItemType, el.ItemID})
+            .Select(el => new {Key = HashCodeHelper.Get(el.ItemName, el.ItemType), Value = el.ItemID})
             .ToListAsync();
 
-        var itemMap = itemMapAsync
-            .Where(el => itemCombKeys.Contains(HashCodeHelper.Get(el.ItemName, el.ItemType)))
-            .ToDictionary(el => HashCodeHelper.Get(el.ItemName, el.ItemType), el => el.ItemID);
+        var itemMap = itemMapAsync.ToDictionary(el => el.Key, el=>el.Value);
 
-        var dateTimeKeys = records.Select(el=>el.DateTime).ToHashSet();
-
-        var rowsAsync = context.Set<Warehouse>()
-            .TagWith("PopulateWarehouseInternal->UpdateOrInsert()->2:")
-            .Where(el => dateTimeKeys.Contains(el.DateTime) && itemMap.Values.Contains(el.ItemID))
-            .ToListAsync();
-
-        foreach (var record in records) 
+        foreach (var val in records.Values)
         {
-            record.ItemID = itemMap[HashCodeHelper.Get(record.ItemName, record.ItemType)];
+            if(itemMap.TryGetValue(HashCodeHelper.Get(val.Item.ItemName, val.Item.ItemType), out var itemId))
+            {
+                val.ItemID = itemId;
+            }
         }
 
-        var map = records.ToDictionary(el => HashCodeHelper.Get(el.ItemID, el.DateTime), el => el);
-        var rows = rowsAsync.Result
-            .Where(el => map.ContainsKey(HashCodeHelper.Get(el.ItemID, el.DateTime)))
-            .ToDictionary(el => HashCodeHelper.Get(el.ItemID, el.DateTime), el => el);
-        var toadd = new List<WarehouseInternal>();
-        foreach (var (key, val) in map) 
+        var itemIDKeys = records.GetItemIdKeys();
+        var dateTimeKeys = records.GetDataTimeKeys();
+  
+        var rowsAsync = await context.Set<Warehouse>()
+            .TagWith("PopulateWarehouseInternal->UpdateOrInsert()->2:")
+            .Where(el => itemIDKeys.Contains(el.ItemID) && dateTimeKeys.Contains(el.DateTime))
+            .ToListAsync();
+
+        var rows = rowsAsync.ToDictionary(el => HashCodeHelper.Get(el.ItemID, el.DateTime), el => el);
+
+        foreach (var val in records.Values)
         {
-            if (rows.TryGetValue(key, out Warehouse value))
-            {
+            if( rows.TryGetValue(HashCodeHelper.Get(val.ItemID, val.DateTime), out Warehouse? value)){
                 value.Count += val.Count;
+                records.Remove(val);
             }
             else
             {
-                toadd.Add(val);
+                val.Item = null!;
             }
         }
 
-        await Insert(toadd);
+        await Insert(records);
         await context.SaveChangesAsync();
     }
 }

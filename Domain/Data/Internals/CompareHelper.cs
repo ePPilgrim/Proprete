@@ -4,26 +4,24 @@ namespace Proprette.Domain.Data.Internals;
 
 internal static class CompareHelper
 {
-    public static int Compare(string key1, ItemType key2, string otherKey1, ItemType otherKey2)
+    internal static int Compare(string key1, ItemType key2, string otherKey1, ItemType otherKey2)
     {
         int key1Cmp = string.Compare(key1, otherKey1);
-        int key2Cmp = key2.CompareTo(otherKey2);
-        return compare(key1Cmp, key2Cmp);
+        if (key1Cmp != 0) return key1Cmp;
+        return key2.CompareTo(otherKey2);
     }
 
-    public static int Compare(int key1, DateTime key2, int otherKey1, DateTime otherKey2)
+    internal static int Compare(int key1, DateTime key2, int otherKey1, DateTime otherKey2)
     {
         int key1Cmp = key1 - otherKey1;
-        int key2Cmp = key2.CompareTo(otherKey2);
-        return compare(key1Cmp, key2Cmp);
+        if (key1Cmp != 0) return key1Cmp;
+        return key2.CompareTo(otherKey2);
     }
 
-    private static int compare(int key1Cmp, int key2Cmp)
+    internal static int Compare(string key1, ItemType key2, DateTime key3, string otherKey1, ItemType otherKey2, DateTime otherKey3)
     {
-        if (key1Cmp == 0 && key2Cmp == 0) return 0;
-        if (key1Cmp < 0) return -1;
-        if (key1Cmp > 0) return 1;
-        if (key2Cmp < 0) return -1;
-        return 1;
+        int key12Cmp = Compare(key1, key2, otherKey1, otherKey2);
+        if (key12Cmp != 0) return key12Cmp;
+        return key3.CompareTo(otherKey3);
     }
 }

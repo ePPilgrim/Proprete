@@ -3,7 +3,9 @@ using Proprette.Domain.Data.Models;
 using Proprette.DataSeeding;
 using Proprette.Domain.Services.DataSeeding;
 using Microsoft.Extensions.Logging;
-using Proprette.Domain.Context;
+using Microsoft.Extensions.DependencyInjection;
+using Proprette.Infrastructure;
+using Proprette.Domain;
 
 Console.WriteLine("Input file name:");
 //var filePath = Console.ReadLine();
@@ -14,6 +16,7 @@ if(filePath == null)
 }
 var csvFile = new CsvFile<WarehouseDto>(filePath);
 var memoryDataLayer = new Records();
+var obj1 = csvFile.Read().Take(3).ToList();
 var obj = csvFile.Read().ToList();
 
 // Configure logging
@@ -24,10 +27,11 @@ var loggerFactory = LoggerFactory.Create(builder =>
         .AddFilter(DbLoggerCategory.Database.Command.Name, LogLevel.Information);  // Filter logs for database commands
 });
 
-var dbContexOptionsBuilder = new DbContextOptionsBuilder<PropretteDbContext>();
-dbContexOptionsBuilder
-    .UseLoggerFactory(loggerFactory)
-    .UseSqlite("Data Source=C:\\Users\\demyd\\Practice\\Proprette\\API\\Proprette.db", b => b.MigrationsAssembly("Service"));
+var serviceCollection = new ServiceCollection();   
+serviceCollection.AddSingleton(loggerFactory);
+serviceCollection.AddInfrastructure("Data Source=C:\\Users\\demyd\\Practice\\Proprette\\API\\Proprette.db");
+serviceCollection.AddDomain();
+var services = serviceCollection.BuildServiceProvider();
 
 Console.WriteLine("Choose the next option to process:");
 Console.WriteLine("\tr - read from file to DB");
@@ -35,54 +39,22 @@ Console.WriteLine("\tw - write from memory to file");
 
 switch (Console.ReadLine())
 {
-    case "i":
-        //var obj = csvFile.Read().ToList();
-        //using (var dbContext = new PropretteDbContext(dbContexOptionsBuilder.Options))
-        //{
-        //    var serv = new PopulateTable(dbContext);
-        //    var res = serv.InsertItems(obj);
-        //    res.Wait();
-        //}
-        break;
     case "r":
-        using (var dbContext = new PropretteDbContext(dbContexOptionsBuilder.Options))
+        using(var scope = services.CreateScope())
         {
-            var serv = new PopulateItemByOrder(dbContext, obj.Take(3).ToList());
-            var res = serv.UpdateOrInsert();
+            var populator = services.GetService<IPopulateTable<WarehouseDto>>();
+            var res = populator.UpdateOrInsert(obj);// obj.Take(3));
             res.Wait();
         }
-        using (var dbContext = new PropretteDbContext(dbContexOptionsBuilder.Options))
-        {
-            var serv = new PopulateItemByOrder(dbContext, obj);
-            var res = serv.UpdateOrInsert();
-            res.Wait();
-        }
-        //using (var dbContext = new PropretteDbContext(dbContexOptionsBuilder.Options))
-        //{
-        //    var serv = new PopulateTable(dbContext);
-        //    //var res = 
-        //     serv.PopulateWarehouse(obj.Skip(3).Take(4));
-        //    //res.Wait();
-        //}
-        //using (var dbContext = new PropretteDbContext(dbContexOptionsBuilder.Options))
-        //{
-        //    var serv = new PopulateTable(dbContext);
-        //    //var res = 
-        //    serv.PopulateWarehouse(obj);
-        //    //res.Wait();
-        //}
-
-        //dbContext.Add(new Location { LocationName = "Prague0" });
-        //dbContext.SaveChanges();
-
         break;
     case "d":
-
-        using (var dbContext = new PropretteDbContext(dbContexOptionsBuilder.Options))
+        using (var scope = services.CreateScope())
         {
-            var serv = new PopulateItemByOrder(dbContext, obj);
-            var res = serv.Delete();
+            //var services = scope.ServiceProvider;
+            var populator = services.GetService<IPopulateTable<WarehouseDto>>();
+            var res = populator.Delete();
             res.Wait();
+
         }
         break;
     case "w":

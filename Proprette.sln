@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Proprette.Domain", "Domain\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Proprette.DataSeeding", "DataSeeding\Proprette.DataSeeding.csproj", "{CC4D89D1-91BC-4967-81D5-186493D0225C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proprette.Infrastructure", "Infrastructure\Proprette.Infrastructure.csproj", "{4AD831CF-0211-413B-9B6F-E637B550B8C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Proprette.Infrastructure", "Infrastructure\Proprette.Infrastructure.csproj", "{4AD831CF-0211-413B-9B6F-E637B550B8C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

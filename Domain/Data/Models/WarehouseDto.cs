@@ -16,6 +16,7 @@ public class WarehouseDto
         Count = count;
     }
 
-    public WarehouseDto() { }   
+    public WarehouseDto() : this(null!, ItemType.None, DateTime.MinValue, 0) { }
+
 }
 

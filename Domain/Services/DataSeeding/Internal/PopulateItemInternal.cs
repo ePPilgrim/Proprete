@@ -5,41 +5,45 @@ using Proprette.Domain.Data.Internals;
 
 namespace Proprette.Domain.Services.DataSeeding.Internal;
 
-internal class PopulateItemInternal : IPopulateTable<ItemInternal>
+internal class PopulateItemInternal : IPopulateTableInternal<Item>
 {
     private readonly PropretteDbContext context;
 
-    public PopulateItemInternal(PropretteDbContext dbContext)
+    public PopulateItemInternal(PropretteDbContext context)
     {
-        context = dbContext ?? throw new ArgumentNullException("dbContext");
+        this.context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public async Task UpdateOrInsert(IEnumerable<ItemInternal> data)
+    public async Task UpdateOrInsert(IDBCollection<Item> data)
     {
-        var itemNameKeys = data.Select(el => el.ItemName).ToHashSet();
-        var itemTypeKeys = data.Select(el => el.ItemType).ToHashSet();
+        var itemNameKeys = data.GetItemNameKeys();
+        var itemTypeKeys = data.GetItemTypeKeys();
 
-        var rowsAsync = context.Set<Item>().TagWith("PopulateItem->UpdateOrInsert():")
+        var rowsAsync = await context.Set<Item>().TagWith("PopulateItemInternal->UpdateOrInsert():")
             .AsNoTracking()
             .Where(x => itemNameKeys.Contains(x.ItemName) && itemTypeKeys.Contains(x.ItemType))
             .Select(x => new { x.ItemName, x.ItemType })
-            .ToListAsync();
+            .Select(el => HashCodeHelper.Get(el.ItemName, el.ItemType))
+            .ToListAsync(); 
 
-        var rowHashs = data.Select(el => HashCodeHelper.Get(el.ItemName, el.ItemType))
-            .ToHashSet()
-            .Except(rowsAsync.Result.Select(el => HashCodeHelper.Get(el.ItemName, el.ItemType)))
-            .ToHashSet();
+       var rowHashs = rowsAsync.ToHashSet();
 
-        var toadd = data.Where(el => rowHashs.Contains(HashCodeHelper.Get(el.ItemName, el.ItemType)));
+        foreach (var val in data.Values)
+        {
+            if(rowsAsync.Contains(HashCodeHelper.Get(val.ItemName, val.ItemType)))
+            {
+                data.Remove(val);
+            }
+        }
 
-        await Insert(toadd);
+        var res = Insert(data);
     }
 
-    public async Task Insert(IEnumerable<ItemInternal> records)
+    public async Task Insert(IDBCollection<Item> records)
     {
-        if (records.Any())
+        if (records.Values.Any())
         {
-            await context.Set<Item>().AddRangeAsync(records.Select(el => el.Item).ToList());
+            await context.Set<Item>().AddRangeAsync(records.Values);
             await context.SaveChangesAsync();
         }  
     }

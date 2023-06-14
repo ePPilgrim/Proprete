@@ -11,10 +11,15 @@ public class Warehouse
     [ForeignKey("ItemID")]
     public Item Item { get; set; }
 
-    public Warehouse(Item item)
+    public Warehouse(Warehouse warehouse)
     {
-        Item = item;
+        ItemID = warehouse.ItemID;
+        DateTime = warehouse.DateTime;
+        Count = warehouse.Count;
+        Item = new Item(warehouse.Item);
     }
 
-    private Warehouse() : this(null!) { }
+    private Warehouse()  {
+        Item = null!;
+    }
 }
