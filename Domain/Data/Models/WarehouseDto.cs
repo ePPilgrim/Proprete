@@ -1,10 +1,13 @@
 ﻿using Proprette.Domain.Data.Common;
+using System.ComponentModel.DataAnnotations;
 
 namespace Proprette.Domain.Data.Models;
 public class WarehouseDto
 {
     public string ItemName { get; set; }
     public ItemType ItemType { get; set; }
+
+    [DataType(DataType.Date)]
     public DateTime DateTime { get; set; }
     public int Count { get; set; }
 

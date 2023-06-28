@@ -1,10 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Proprette.Domain.Data.Entities;
 
 public class Warehouse
 {
     public int ItemID { get; set; }
+    [DataType(DataType.Date)]
     public DateTime DateTime { get; set; }
     public int Count { get; set; }
 
