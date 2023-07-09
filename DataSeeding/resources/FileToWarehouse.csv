@@ -1,0 +1,13 @@
+ItemName,ItemType,DateTime,Count
+Wanish,Floor,1/1/2023 12:00:00 AM,10
+Wanish,Floor,2/1/2023 12:00:00 AM,7
+Wanish,Window,1/1/2023 12:00:00 AM,9
+Wanish,Window,2/1/2023 12:00:00 AM,6
+Wanish,Ceil,1/1/2023 12:00:00 AM,8
+Wanish,Ceil,2/1/2023 12:00:00 AM,5
+Domestos,Floor,1/1/2023 12:00:00 AM,20
+Domestos,Window,1/1/2023 12:00:00 AM,19
+Domestos,Ceil,1/1/2023 12:00:00 AM,18
+Domestos,Floor,2/1/2023 12:00:00 AM,17
+Domestos,Window,2/1/2023 12:00:00 AM,16
+Domestos,Ceil,2/1/2023 12:00:00 AM,15

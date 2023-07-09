@@ -5,7 +5,7 @@ using Proprette.Domain.Services.DataSeeding.Internal;
 
 namespace Proprette.Domain.Services.DataSeeding
 {
-    internal class PopulateWarehouse : IPopulateTable<WarehouseDto>
+    internal class PopulateWarehouse<T> : IPopulateTable<T> where T : class
     {
         private readonly IEntityFactory<Warehouse> warehouseFactory;
         private readonly IMapper mapper;
@@ -23,13 +23,13 @@ namespace Proprette.Domain.Services.DataSeeding
             await internalPopulator.Delete();   
         }
 
-        public async Task Insert(IEnumerable<WarehouseDto> records)
+        public async Task Insert(IEnumerable<T> records)
         {
             var collection = warehouseFactory.CreateCollectionShallow(mapper.Map<IEnumerable<Warehouse>>(records)); 
             await internalPopulator.Insert(collection);
         }
 
-        public async Task UpdateOrInsert(IEnumerable<WarehouseDto> records)
+        public async Task UpdateOrInsert(IEnumerable<T> records)
         {
             var collection = warehouseFactory.CreateCollectionShallow(mapper.Map<IEnumerable<Warehouse>>(records));
             await internalPopulator.UpdateOrInsert(collection);

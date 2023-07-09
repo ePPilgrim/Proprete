@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Proprette.DataSeeding": {
+      "commandName": "Project",
+      "commandLineArgs": "--appopt=\"u\" --ModelRootDir=\"C:\\Users\\demyd\\Practice\\Proprette\\DataSeeding\\resources\","
+    }
+  }
+}

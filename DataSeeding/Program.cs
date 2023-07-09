@@ -6,20 +6,17 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Proprette.Infrastructure;
 using Proprette.Domain;
+using Microsoft.Extensions.Hosting;
+using System.Reflection;
+using Microsoft.CodeAnalysis.CSharp;
+using System.Text.RegularExpressions;
+using Proprette.DataSeeding.DataSource.Models;
+using static System.Net.Mime.MediaTypeNames;
+using Proprette.DataSeeding.DataSource.Services;
+using Proprette.DataSeeding.MainService;
 
-Console.WriteLine("Input file name:");
-//var filePath = Console.ReadLine();
-string filePath = "proba.csv";
-if(filePath == null)
-{
-    throw new ArgumentNullException(nameof(filePath));
-}
-var csvFile = new CsvFile<WarehouseDto>(filePath);
-var memoryDataLayer = new Records();
-var obj1 = csvFile.Read().Take(3).ToList();
-var obj = csvFile.Read().ToList();
+var hostBuilder = Host.CreateDefaultBuilder(args);
 
-// Configure logging
 var loggerFactory = LoggerFactory.Create(builder =>
 {
     builder
@@ -27,38 +24,23 @@ var loggerFactory = LoggerFactory.Create(builder =>
         .AddFilter(DbLoggerCategory.Database.Command.Name, LogLevel.Information);  // Filter logs for database commands
 });
 
-var serviceCollection = new ServiceCollection();   
-serviceCollection.AddSingleton(loggerFactory);
-serviceCollection.AddInfrastructure("Data Source=C:\\Users\\demyd\\Practice\\Proprette\\API\\Proprette.db");
-serviceCollection.AddDomain();
-var services = serviceCollection.BuildServiceProvider();
-
-Console.WriteLine("Choose the next option to process:");
-Console.WriteLine("\tr - read from file to DB");
-Console.WriteLine("\tw - write from memory to file");
-
-switch (Console.ReadLine())
+hostBuilder.ConfigureServices(services => 
 {
-    case "r":
-        using(var scope = services.CreateScope())
-        {
-            var populator = services.GetService<IPopulateTable<WarehouseDto>>();
-            var res = populator.UpdateOrInsert(obj);// obj.Take(3));
-            res.Wait();
-        }
-        break;
-    case "d":
-        using (var scope = services.CreateScope())
-        {
-            //var services = scope.ServiceProvider;
-            var populator = services.GetService<IPopulateTable<WarehouseDto>>();
-            var res = populator.Delete();
-            res.Wait();
+    services.AddHostedService<DataSeedingApplication>();
+    services.AddSingleton(loggerFactory);
+    services.AddInfrastructure("Data Source=C:\\Users\\demyd\\Practice\\Proprette\\API\\Proprette.db");
+    services.AddScoped<IModelLocator<IFileToModel>, DefaultModelLocator<IFileToModel>>();
+    services.AddScoped<IFileReader<IFileToModel>, DefaultFileReader>();
+    services.AddScoped<MainServiceFactory>();
+    services.AddDomain();
+    services.AddAutoMapper(typeof(FileDomainProfile));
+});
 
-        }
-        break;
-    case "w":
-        csvFile.Write(memoryDataLayer.WarehouseRecords);
-        break;
-}
+var host = hostBuilder.Build();
+host.Start();
+
+
+
+
+
 

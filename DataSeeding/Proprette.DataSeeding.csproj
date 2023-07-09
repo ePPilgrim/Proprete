@@ -9,12 +9,17 @@
 
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="30.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\API\Proprette.API.csproj" />
     <ProjectReference Include="..\Domain\Proprette.Domain.csproj" />
     <ProjectReference Include="..\Infrastructure\Proprette.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="resources\" />
   </ItemGroup>
 
 </Project>

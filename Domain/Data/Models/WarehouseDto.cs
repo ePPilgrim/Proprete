@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace Proprette.Domain.Data.Models;
-public class WarehouseDto
+public class WarehouseDto 
 {
     public string ItemName { get; set; }
     public ItemType ItemType { get; set; }
