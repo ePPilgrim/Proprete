@@ -1,8 +1,6 @@
-﻿using Proprette.DataSeeding.DataSource.Models;
-
-namespace Proprette.DataSeeding.DataSource.Services
+﻿namespace Proprette.DataSeeding.DataSource.Services
 {
-    public interface IFileReader<out T>
+    public interface IFileReader<T>
     {
         IEnumerable<T> ReadAll(string path);
     }

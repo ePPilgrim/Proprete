@@ -22,21 +22,21 @@ namespace Proprette.DataSeeding.DataSource.Services
                 modelLocator.ResolveModelLocations();
                 res = getDataFromFile(path, modelId) ?? throw new NullReferenceException(nameof(path));
             }
-            return res;
+            if(res.Where(x=>x == null).Any()){
+                throw new Exception($"Some rows of the file are not parsed propperly or there is invalid rows in the file {path}");
+            }
+            return res.Select(x => (IFileToModel)x);
         }
 
-        private IEnumerable<IFileToModel>? getDataFromFile(string path, string modelId)
+        private IList<object?>? getDataFromFile(string path, string modelId)
         {
             if (modelLocator.TryToGetTypeByName(modelId, out var modelType))
             {
                 using (var reader = new StreamReader(path))
                 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                 {
-                    var res = csv.GetRecords(modelType);
-                    var res3 = res.ToList().Select(x => x);
-
-                    var res2 = (IEnumerable<IFileToModel>)res3;
-                    return res2;
+                    var res = csv.GetRecords(modelType).ToList();
+                    return res;
                 }
             }
             return null;

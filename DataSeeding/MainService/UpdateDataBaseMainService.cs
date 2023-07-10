@@ -41,7 +41,7 @@ namespace Proprette.DataSeeding.MainService
 
         private async Task populateWarehouse(string path)
         {
-            IEnumerable<FileToWarehouse>? data = fileReader.ReadAll(path) as IEnumerable<FileToWarehouse>;
+            IEnumerable<FileToWarehouse>? data = fileReader.ReadAll(path).Select(x=>(FileToWarehouse)x);
             if (data == null)
             {
                 Console.WriteLine("No data is uploaded from the file to memory");

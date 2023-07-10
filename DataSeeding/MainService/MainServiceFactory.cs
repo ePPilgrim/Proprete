@@ -1,5 +1,4 @@
-﻿using Microsoft.Build.Framework;
-using Proprette.DataSeeding.DataSource.Models;
+﻿using Proprette.DataSeeding.DataSource.Models;
 using Proprette.DataSeeding.DataSource.Services;
 using Proprette.Domain.Services.DataSeeding;
 

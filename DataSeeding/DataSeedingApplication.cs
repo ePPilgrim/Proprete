@@ -56,7 +56,6 @@ namespace Proprette.DataSeeding
                 Console.WriteLine("No root directory is set so environment rood directory is used.");
                 dir = environment.ContentRootPath;
             }
-            dir = @"C:\Users\demyd\Practice\Proprette\DataSeeding\resources";
             if (!Directory.Exists(dir))
             {
                 throw new ArgumentException($"No directory {dir} exist");
