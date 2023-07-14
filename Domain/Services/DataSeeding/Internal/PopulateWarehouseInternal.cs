@@ -9,14 +9,14 @@ internal class PopulateWarehouseInternal : IPopulateTableInternal<Warehouse>
 {
     private readonly PropretteDbContext context;
     private readonly IPopulateTableInternal<Item> itemTable;
-    private readonly IEntityFactory<Item> entityFactory;    
+    private readonly IEntityFactory<Item> entityFactory;   
 
     public PopulateWarehouseInternal(PropretteDbContext context,
         IEntityFactory<Item> entityFactory)
     {
         this.context = context;
         this.itemTable = entityFactory.CreatePopulateInternal();
-        this.entityFactory = entityFactory;
+        this.entityFactory = entityFactory ?? throw new ArgumentNullException(nameof(entityFactory));
     }
 
     public async Task Delete()
@@ -67,7 +67,6 @@ internal class PopulateWarehouseInternal : IPopulateTableInternal<Warehouse>
             .ToListAsync();
 
         var rows = rowsAsync.ToDictionary(el => HashCodeHelper.Get(el.ItemID, el.DateTime), el => el);
-
         foreach (var val in records.Values)
         {
             if( rows.TryGetValue(HashCodeHelper.Get(val.ItemID, val.DateTime), out Warehouse? value)){

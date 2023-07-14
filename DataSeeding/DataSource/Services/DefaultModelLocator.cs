@@ -1,4 +1,6 @@
-﻿using Proprette.DataSeeding.DataSource.Models;
+﻿using Microsoft.Build.Framework;
+using Microsoft.Extensions.Logging;
+using Proprette.DataSeeding.DataSource.Models;
 using System.Text.RegularExpressions;
 
 namespace Proprette.DataSeeding.DataSource.Services
@@ -6,6 +8,12 @@ namespace Proprette.DataSeeding.DataSource.Services
     internal class DefaultModelLocator<T> : IModelLocator<T>
     {
         private IDictionary<string, Type> mapToType = new Dictionary<string, Type>();
+        private ILogger<DefaultModelLocator<T>> logger;
+
+        public DefaultModelLocator(ILogger<DefaultModelLocator<T>> logger)
+        {
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
 
         public void ResolveModelLocations()
         {
@@ -17,6 +25,7 @@ namespace Proprette.DataSeeding.DataSource.Services
                     x => x.GetTypes().Where(t => typeof(IFileToModel).IsAssignableFrom(t) && !t.IsInterface),
                     (x, y) => new { Key = y.Name.ToLower(), Value = y })
                 .Distinct().ToDictionary(x => x.Key, x => x.Value);
+            logger.LogInformation($"Number of models = {mapToType.Count}");
         }
 
         public bool TryToGetTypeByName(string typeId, out Type? type)

@@ -1,15 +1,10 @@
-﻿using Microsoft.Build.Framework;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Proprette.DataSeeding.MainService;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Proprette.DataSeeding 
+namespace Proprette.DataSeeding
 {
     internal class DataSeedingApplication : IHostedService
     {
@@ -17,52 +12,67 @@ namespace Proprette.DataSeeding
         private readonly IConfiguration configuration;
         private readonly IHostApplicationLifetime hostApplicationLifetime;
         private readonly IHostEnvironment environment;
-        private readonly MainServiceFactory mainServiceFactory;
+        private readonly ILogger<DataSeedingApplication> logger;
 
         public DataSeedingApplication(IServiceProvider serviceProvider,
             IConfiguration configuration,
             IHostApplicationLifetime hostApplicationLifetime,
             IHostEnvironment environment,
-            MainServiceFactory mainServiceFactory)
+            ILogger<DataSeedingApplication> logger)
         {
             this.serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration)); 
             this.hostApplicationLifetime = hostApplicationLifetime ?? throw new ArgumentNullException(nameof(hostApplicationLifetime));
             this.environment = environment ?? throw new ArgumentNullException(nameof(environment));
-            this.mainServiceFactory = mainServiceFactory ?? throw new ArgumentNullException(nameof(mainServiceFactory));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        public Task StartAsync(CancellationToken cancellationToken)
         {
             hostApplicationLifetime.ApplicationStarted.Register(OnStarted);
+            return Task.CompletedTask;
         }
 
-        public async Task StopAsync(CancellationToken cancellationToken)
+        public Task StopAsync(CancellationToken cancellationToken)
         {
-            Console.WriteLine("Application has finished!!!!");
+            hostApplicationLifetime.ApplicationStopped.Register(OnStopped); 
+            return Task.CompletedTask;
         }
 
         private void OnStarted()
         {
+            logger.LogInformation($"Application {environment.ApplicationName} run in the environment - {environment.EnvironmentName}!!!!");
             var appOption = configuration["appopt"];
             if (string.IsNullOrEmpty(appOption))
             {
-                Console.WriteLine("No app option is set so default option is used.");
-                appOption = "p";
+                logger.LogWarning("No app option is set so default implementation will start.");
             }
             var dir = configuration["ModelRootDir"];
             if (string.IsNullOrEmpty(dir))
             {
-                Console.WriteLine("No root directory is set so environment rood directory is used.");
+                logger.LogWarning("No root directory is set so environment rood directory is used.");
                 dir = environment.ContentRootPath;
             }
             if (!Directory.Exists(dir))
             {
                 throw new ArgumentException($"No directory {dir} exist");
             }
-            using (serviceProvider.CreateScope()) ;
-            var service = mainServiceFactory.Create(appOption);
-            service.Run(dir).Wait();
+            using (var serviceScope = serviceProvider.CreateScope())
+            {
+                var services = serviceScope.ServiceProvider;
+                var serviceFactory = services.GetService<MainServiceFactory>();
+                if(serviceFactory == null)
+                {
+                    logger.LogError("Service Factory were not resolved!!!!");
+                    return;
+                }
+                var service = serviceFactory.Create(appOption);
+                service.Run(dir).Wait();
+            }
+        }
+
+        private void OnStopped() {
+            logger.LogInformation("Application has finished!!!!");
         }
     }
 }

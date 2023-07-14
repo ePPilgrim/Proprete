@@ -1,9 +1,17 @@
-﻿namespace Proprette.DataSeeding.MainService
+﻿using Microsoft.Extensions.Logging;
+
+namespace Proprette.DataSeeding.MainService
 {
-    internal class PopulateFileMainService : IMainService
+    internal sealed class PopulateFile : BaseMainService
     {
         private readonly Records records = new Records();
-        public async Task Run(string pathToDir)
+
+        public PopulateFile(ILogger<IMainService> logger) : base(logger)
+        {}
+
+        protected override string ServiceName => "PopulateFile";
+
+        protected override async Task runService(string pathToDir)
         {
             var pathToFile = Path.Combine(pathToDir, "FileToWarehouse.csv");
             await writeToFile(pathToFile, records.WarehouseRecords);

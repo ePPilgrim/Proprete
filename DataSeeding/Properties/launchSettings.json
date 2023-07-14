@@ -1,11 +1,20 @@
 {
   "profiles": {
     "Proprette.DataSeeding": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Production"
+      }
     },
     "CommandLineConfiguration": {
       "commandName": "Project",
       "commandLineArgs": "--appopt=\"u\" --ModelRootDir=\"C:\\Users\\demyd\\Practice\\Proprette\\DataSeeding\\resources\""
+    },
+    "Development": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
     }
   }
 }

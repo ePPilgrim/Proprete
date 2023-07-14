@@ -1,4 +1,6 @@
-﻿using Proprette.DataSeeding.DataSource.Models;
+﻿using Microsoft.Build.Framework;
+using Microsoft.Extensions.Logging;
+using Proprette.DataSeeding.DataSource.Models;
 using Proprette.DataSeeding.DataSource.Services;
 using Proprette.Domain.Services.DataSeeding;
 
@@ -8,27 +10,28 @@ namespace Proprette.DataSeeding.MainService
     {
         private readonly IFileReader<IFileToModel> fileReader;
         private readonly IPopulatorFactory populatorFactory;
+        private readonly ILogger<IMainService> logger;
         public MainServiceFactory(IFileReader<IFileToModel> fileReader,
-                                    IPopulatorFactory populatorFactory)
+                                    IPopulatorFactory populatorFactory,
+                                    ILogger<IMainService> logger)
         {
             this.fileReader = fileReader ?? throw new ArgumentNullException(nameof(fileReader));
             this.populatorFactory = populatorFactory ?? throw new ArgumentNullException(nameof(populatorFactory));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
-        public IMainService Create(string serviceToChoose)
+        public IMainService Create(string? serviceToChoose)
         {
             switch(serviceToChoose)
             {
                 case "u":
-                    Console.WriteLine("Update and Insert to DB main service is initiated");
-                    return new UpdateDataBaseMainService(fileReader, populatorFactory);
+                    return new UpdateDataBase(fileReader, populatorFactory, logger);
                 case "d":
-                    Console.WriteLine("Delete DB main service is initiated.");
-                    return new ClearDataBaseMainService(populatorFactory);
+                    return new ClearDataBase(populatorFactory, logger);
                 case "p":
-                    Console.WriteLine("Dummy service for creating csv files is initiated.");
-                    return new PopulateFileMainService();
+                    return new PopulateFile(logger);
                 default:
-                    throw new NotImplementedException($"No implementation of main service found for this options - {serviceToChoose}");
+                    logger.LogWarning($"No implementation of main service found for this options - {serviceToChoose}");
+                    return new Default(logger);
             }
         }
     }

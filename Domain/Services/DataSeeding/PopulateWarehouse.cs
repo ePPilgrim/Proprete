@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Proprette.Domain.Data.Entities;
-using Proprette.Domain.Data.Models;
 using Proprette.Domain.Services.DataSeeding.Internal;
 
 namespace Proprette.Domain.Services.DataSeeding
