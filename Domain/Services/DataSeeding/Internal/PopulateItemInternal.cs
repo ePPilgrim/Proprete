@@ -24,23 +24,23 @@ internal class PopulateItemInternal : IPopulateTableInternal<Item>
             .Where(x => itemNameKeys.Contains(x.ItemName) && itemTypeKeys.Contains(x.ItemType))
             .Select(x => new { x.ItemName, x.ItemType })
             .Select(el => HashCodeHelper.Get(el.ItemName, el.ItemType))
-            .ToListAsync(); 
+            .ToListAsync();
 
-       var rowHashs = rowsAsync.ToHashSet();
+        var rowHashs = rowsAsync.ToHashSet();
 
         foreach (var val in data.Values)
         {
-            if(rowsAsync.Contains(HashCodeHelper.Get(val.ItemName, val.ItemType)))
+            if (rowsAsync.Contains(HashCodeHelper.Get(val.ItemName, val.ItemType)))
             {
                 data.Remove(val);
             }
         }
 
-        var res = Insert(data);
+        await Insert(data);
     }
 
     public async Task Insert(IDBCollection<Item> records)
-    {
+    { 
         if (records.Values.Any())
         {
             await context.Set<Item>().AddRangeAsync(records.Values);

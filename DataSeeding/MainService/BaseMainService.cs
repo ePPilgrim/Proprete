@@ -20,9 +20,9 @@ namespace Proprette.DataSeeding.MainService
             logger.LogInformation($"{ServiceName} service is stopped.");
         }
 
-        protected virtual Task runService(string pathToDir)
+        protected virtual async Task runService(string pathToDir)
         {
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
     }
 }

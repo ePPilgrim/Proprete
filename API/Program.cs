@@ -10,7 +10,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddInfrastructure(builder.Configuration.GetConnectionString("SqliteString"));
+//builder.Services.AddSqliteInfrastructure(builder.Configuration.GetConnectionString("SqliteString"));
+builder.Services.AddMariaDbInfrastructure(builder.Configuration.GetConnectionString("MariaDbString"));
 builder.Services.AddDomain();
 
 //builder.Services.AddDbContext<PropretteDbContext>(

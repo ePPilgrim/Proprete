@@ -11,28 +11,30 @@ using Proprette.Domain.Context;
 namespace Proprette.Infrastructure.Migrations
 {
     [DbContext(typeof(PropretteDbContext))]
-    [Migration("20230605064509_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20230715115728_InitMigrationMariaDB")]
+    partial class InitMigrationMariaDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.5");
+            modelBuilder
+                .HasAnnotation("ProductVersion", "7.0.9")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Proprette.Domain.Entities.Item", b =>
+            modelBuilder.Entity("Proprette.Domain.Data.Entities.Item", b =>
                 {
                     b.Property<int>("ItemID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("ItemName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<int>("ItemType")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.HasKey("ItemID");
 
@@ -41,16 +43,16 @@ namespace Proprette.Infrastructure.Migrations
                     b.ToTable("Item");
                 });
 
-            modelBuilder.Entity("Proprette.Domain.Entities.Location", b =>
+            modelBuilder.Entity("Proprette.Domain.Data.Entities.Location", b =>
                 {
                     b.Property<int>("LocationID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("LocationName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("varchar(50)");
 
                     b.HasKey("LocationID");
 
@@ -59,19 +61,19 @@ namespace Proprette.Infrastructure.Migrations
                     b.ToTable("Location");
                 });
 
-            modelBuilder.Entity("Proprette.Domain.Entities.SubWarehouse", b =>
+            modelBuilder.Entity("Proprette.Domain.Data.Entities.SubWarehouse", b =>
                 {
                     b.Property<int>("LocationID")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<int>("ItemID")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateTime")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int>("Count")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.HasKey("LocationID", "ItemID", "DateTime");
 
@@ -83,16 +85,16 @@ namespace Proprette.Infrastructure.Migrations
                     b.ToTable("SubWarehouse");
                 });
 
-            modelBuilder.Entity("Proprette.Domain.Entities.Warehouse", b =>
+            modelBuilder.Entity("Proprette.Domain.Data.Entities.Warehouse", b =>
                 {
                     b.Property<int>("ItemID")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateTime")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int>("Count")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.HasKey("ItemID", "DateTime");
 
@@ -101,15 +103,15 @@ namespace Proprette.Infrastructure.Migrations
                     b.ToTable("Warehouse");
                 });
 
-            modelBuilder.Entity("Proprette.Domain.Entities.SubWarehouse", b =>
+            modelBuilder.Entity("Proprette.Domain.Data.Entities.SubWarehouse", b =>
                 {
-                    b.HasOne("Proprette.Domain.Entities.Item", "Item")
+                    b.HasOne("Proprette.Domain.Data.Entities.Item", "Item")
                         .WithMany()
                         .HasForeignKey("ItemID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Proprette.Domain.Entities.Location", "Location")
+                    b.HasOne("Proprette.Domain.Data.Entities.Location", "Location")
                         .WithMany()
                         .HasForeignKey("LocationID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -120,9 +122,9 @@ namespace Proprette.Infrastructure.Migrations
                     b.Navigation("Location");
                 });
 
-            modelBuilder.Entity("Proprette.Domain.Entities.Warehouse", b =>
+            modelBuilder.Entity("Proprette.Domain.Data.Entities.Warehouse", b =>
                 {
-                    b.HasOne("Proprette.Domain.Entities.Item", "Item")
+                    b.HasOne("Proprette.Domain.Data.Entities.Item", "Item")
                         .WithMany()
                         .HasForeignKey("ItemID")
                         .OnDelete(DeleteBehavior.Cascade)

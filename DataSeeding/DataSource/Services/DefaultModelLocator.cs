@@ -1,5 +1,4 @@
-﻿using Microsoft.Build.Framework;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Proprette.DataSeeding.DataSource.Models;
 using System.Text.RegularExpressions;
 

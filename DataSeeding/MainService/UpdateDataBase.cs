@@ -27,6 +27,7 @@ namespace Proprette.DataSeeding.MainService
         {
             logger.LogInformation($"Root directory - {rootFileDirectory}.");
             var warehouseFile = Directory.GetFiles(rootFileDirectory)
+                .Where(x => Path.GetExtension(x) == ".csv")
                 .Where(x => Path.GetFileNameWithoutExtension(x).ToLower() == tableToModelMapping["Warehouse"].ToLower())
                 .FirstOrDefault();
             if (warehouseFile == null)

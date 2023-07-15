@@ -6,7 +6,7 @@ namespace Proprette.Infrastructure;
 
 public static class ServiceRegistration
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, string connectionString)
+    public static IServiceCollection AddSqliteInfrastructure(this IServiceCollection services, string connectionString)
     {
         services.AddDbContext<PropretteDbContext>(options =>
         {
@@ -15,6 +15,18 @@ public static class ServiceRegistration
                 sqlOptions.MigrationsAssembly(
                     typeof(ServiceRegistration).Assembly.FullName);
             });
+        });
+
+        return services;
+    }
+
+    public static IServiceCollection AddMariaDbInfrastructure(this IServiceCollection services, string connectionString)
+    {
+        services.AddDbContext<PropretteDbContext>(options =>
+        {
+            options.UseMySql(connectionString, new MariaDbServerVersion(new Version(10, 3, 29)), 
+                mySqlOptions => mySqlOptions.MigrationsAssembly(
+                    typeof(ServiceRegistration).Assembly.FullName)); 
         });
 
         return services;
