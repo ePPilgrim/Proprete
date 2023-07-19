@@ -14,9 +14,11 @@
       "commandName": "Project",
       "commandLineArgs": "server=localhost;user=root;password=1;database=proprette",
       "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "Development",
-        //"DOTNET_CONNECTIONSTRING": "server=localhost;user=root;password=1;database=proprette"
+        "DOTNET_ENVIRONMENT": "Development"
       }
+    },
+    "Docker": {
+      "commandName": "Docker"
     }
   }
 }
