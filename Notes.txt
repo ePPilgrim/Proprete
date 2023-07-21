@@ -1,0 +1,11 @@
+docker run -e PROPRETTE_CONNECTION_STRING="Database=proprettedb;Server=host.docker.internal;Port=3306;User=root;Password=1" plddpavlo/createdb
+docker build -t plddpavlo/createdb .
+
+docker run -e PROPRETTE_CONNECTION_STRING="Database=proprettedb;Server=host.docker.internal;Port=3307;User=root;Password=@06@June@1981" plddpavlo/createdb
+
+http://192.168.0.186/
+Q7C4@8&b
+ssh Pavlo@192.168.0.186
+--add-host host.docker.internal:host-gateway
+
+sudo docker run --network="host" --add-host host.docker.internal:host-gateway -e PROPRETTE_CONNECTION_STRING="database=proprettedb;server=host.docker.internal;port=3307;user=Pavlo;password=@06@June@1981" plddpavlo/createdb
