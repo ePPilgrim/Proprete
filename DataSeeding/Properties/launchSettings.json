@@ -13,7 +13,7 @@
     },
     "Development": {
       "commandName": "Project",
-      "commandLineArgs": "server=localhost;user=root;password=1;database=proprette",
+      "commandLineArgs": "server=localhost;user=root;password=1;database=proprettedb",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"
       }

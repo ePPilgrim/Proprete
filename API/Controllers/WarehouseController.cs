@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Proprette.Domain.Context;
 using Proprette.Domain.Data.Entities;
 using Proprette.Domain.Data.Models;
 using Proprette.Domain.Services.DataSeeding;
-using System.Security.Cryptography.Xml;
 
 namespace Proprette.API.Controllers
 {
@@ -19,11 +17,11 @@ namespace Proprette.API.Controllers
         private readonly IPopulateTable<WarehouseDto> table;
 
         public WarehouseController(PropretteDbContext context,
-                                    IPopulateTable<WarehouseDto> table,
+                                    IPopulatorFactory factory,
                                     IMapper mapper)
         {
             this.context = context;
-            this.table = table;
+            this.table = (factory != null) ? factory.CreateWarehousePopulator<WarehouseDto>() : throw new ArgumentNullException(nameof(factory));
             this.mapper = mapper;
         }
 

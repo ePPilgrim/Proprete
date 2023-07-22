@@ -11,7 +11,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 //builder.Services.AddSqliteInfrastructure(builder.Configuration.GetConnectionString("SqliteString"));
-builder.Services.AddMariaDbInfrastructure(builder.Configuration.GetConnectionString("MariaDbString"));
+
+var connectionString = Environment.GetEnvironmentVariable("DOTNET_CONNECTIONSTRING");
+if (string.IsNullOrEmpty(connectionString))
+{
+    connectionString = builder.Configuration.GetConnectionString("MariaDbString");
+}
+Console.WriteLine($"Connection is - {connectionString}");
+builder.Services.AddMariaDbInfrastructure(connectionString);
 builder.Services.AddDomain();
 
 //builder.Services.AddDbContext<PropretteDbContext>(
