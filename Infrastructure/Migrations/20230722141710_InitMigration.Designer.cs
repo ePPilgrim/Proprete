@@ -11,8 +11,8 @@ using Proprette.Domain.Context;
 namespace Proprette.Infrastructure.Migrations
 {
     [DbContext(typeof(PropretteDbContext))]
-    [Migration("20230715115728_InitMigrationMariaDB")]
-    partial class InitMigrationMariaDB
+    [Migration("20230722141710_InitMigration")]
+    partial class InitMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

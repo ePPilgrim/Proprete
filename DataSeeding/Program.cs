@@ -10,7 +10,6 @@ var connectionString = (args.Length > 0) ? args[0] : Environment.GetEnvironmentV
 
 hostBuilder.ConfigureServices(services =>
 {
-    //services.AddSqliteInfrastructure("Data Source=C:\\Users\\demyd\\Practice\\Proprette\\API\\Proprette.db");
     services.AddMariaDbInfrastructure(connectionString);
     services.AddDomain();
     services.AddDataSeedingServices();

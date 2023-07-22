@@ -4,7 +4,7 @@
       "commandName": "Project",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Production",
-        "DOTNET_CONNECTIONSTRING": "server=192.168.0.186;port=3307;user=Pavlo;password=@06@June@1981;database=proprettedb"
+        "DOTNET_CONNECTIONSTRING": "server=192.168.0.186;port=3307;user=Pavlo;password=@06@June@1981;database=plddDB"
       }
     },
     "CommandLineConfiguration": {
@@ -13,7 +13,7 @@
     },
     "Development": {
       "commandName": "Project",
-      "commandLineArgs": "server=localhost;user=root;password=1;database=proprette",
+      "commandLineArgs": "server=localhost;user=root;password=1;database=proprettedb",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"
       }
