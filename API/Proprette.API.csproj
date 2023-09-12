@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>d4c00fdc-507b-4544-aab5-70bb2e00c7e3</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <!--<runtimeidentifiers>win-x64</runtimeidentifiers>-->
+    <runtimeidentifiers>win-x64</runtimeidentifiers>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -29,8 +29,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain\Proprette.Domain.csproj" />
     <ProjectReference Include="..\Infrastructure\Proprette.Infrastructure.csproj" />
+    <ProjectReference Include="..\NewDomain\Proprette.NewDomain.csproj" />
   </ItemGroup>
 
 </Project>

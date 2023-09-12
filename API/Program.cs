@@ -19,7 +19,7 @@ if (string.IsNullOrEmpty(connectionString))
 }
 Console.WriteLine($"Connection is - {connectionString}");
 builder.Services.AddMariaDbInfrastructure(connectionString);
-builder.Services.AddDomain();
+//builder.Services.AddDomain();
 
 //builder.Services.AddDbContext<PropretteDbContext>(
 //    options => options.UseSqlite(builder.Configuration.GetConnectionString("SqliteString"), b => b.MigrationsAssembly("Service"))

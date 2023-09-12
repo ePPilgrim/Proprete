@@ -9,3 +9,6 @@
 9. http://192.168.0.186:4444/swagger/index.html
 10. dotnet ef migrations add -s ./API -p ./Infrastructure InitMigration
 11. dotnet ef migrations bundle -s ./API -p ./Infrastructure -o ./Infrastructure/efbundle.exe
+"server=localhost;user=root;password=1;database=newproprettedb"
+
+error NETSDK1112: The runtime pack for Microsoft.AspNetCore.App.Runtime.win-x64 was not downloaded. Try running a NuGet restore with the RuntimeIdentifier 'win-x64'.
