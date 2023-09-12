@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Proprette.Domain.Context;
+using Proprette.NewDomain.Context;
+//using Proprette.Domain.Context;
 
 namespace Proprette.Infrastructure;
 

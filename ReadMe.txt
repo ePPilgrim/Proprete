@@ -9,3 +9,15 @@
 9. http://192.168.0.186:4444/swagger/index.html
 10. dotnet ef migrations add -s ./API -p ./Infrastructure InitMigration
 11. dotnet ef migrations bundle -s ./API -p ./Infrastructure -o ./Infrastructure/efbundle.exe
+"server=localhost;user=root;password=1;database=newproprettedb"
+
+error NETSDK1112: The runtime pack for Microsoft.AspNetCore.App.Runtime.win-x64 was not downloaded. Try running a NuGet restore with the RuntimeIdentifier 'win-x64'.
+
+1. Bleach - any chemical product used to remove color or stains from fabric or surfaces (mostly associated with sodium hypochlorite).
+2. Domestos - used for liqide bleaching. As an item could be represented by brand and volume cattegories.
+3. SAVO original - is the same propose as Domestos but less concetrated (produced and mostly sold in Czech/Slovak market)
+4. Type - spray, liqide, powder
+5. Usage - kitchen, bathroom, floor, desinfection, 
+6. Volume, Color, Function, Type of substance, Brand, Purpose, Target
+7. Katrin - is the finish made products of hygiena, it include tissues, paper towels, etc.
+8. 

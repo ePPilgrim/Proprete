@@ -13,13 +13,14 @@ builder.Services.AddSwaggerGen();
 //builder.Services.AddSqliteInfrastructure(builder.Configuration.GetConnectionString("SqliteString"));
 
 var connectionString = Environment.GetEnvironmentVariable("DOTNET_CONNECTIONSTRING");
+connectionString = "server=localhost;user=root;password=1;database=proprettedb";
 if (string.IsNullOrEmpty(connectionString))
 {
     connectionString = builder.Configuration.GetConnectionString("MariaDbString");
 }
 Console.WriteLine($"Connection is - {connectionString}");
 builder.Services.AddMariaDbInfrastructure(connectionString);
-builder.Services.AddDomain();
+//builder.Services.AddDomain();
 
 //builder.Services.AddDbContext<PropretteDbContext>(
 //    options => options.UseSqlite(builder.Configuration.GetConnectionString("SqliteString"), b => b.MigrationsAssembly("Service"))
