@@ -9,6 +9,6 @@ public class Color : ICategory
     {
         Name = name;
     }
-    public Color() : this(null!)
+    private Color() : this(null!)
     { }
 }
