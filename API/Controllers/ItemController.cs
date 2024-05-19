@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Proprette.Domain.Data.Entities.Category;
-using Proprette.NewDomain.Context;
-using Proprette.NewDomain.Data.Entities;
-using Proprette.NewDomain.Data.Models;
-using Proprette.NewDomain.Services;
+using Proprette.Domain.Context;
+using Proprette.Domain.Data.Entities;
+using Proprette.Domain.Data.Models;
+using Proprette.Domain.Services;
 
 namespace Proprette.API.Controllers;
 

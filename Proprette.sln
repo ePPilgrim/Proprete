@@ -15,8 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		run_bundle.sh = run_bundle.sh
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Proprette.NewDomain", "NewDomain\Proprette.NewDomain.csproj", "{111B599D-C261-4D50-8564-AFBFB8AC81F3}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Proprette.DataSeeding", "DataSeeding\Proprette.DataSeeding.csproj", "{D08190A6-4254-4D81-935F-1554FA5BFB82}"
 EndProject
 Global
@@ -37,10 +35,6 @@ Global
 		{4AD831CF-0211-413B-9B6F-E637B550B8C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4AD831CF-0211-413B-9B6F-E637B550B8C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4AD831CF-0211-413B-9B6F-E637B550B8C1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{111B599D-C261-4D50-8564-AFBFB8AC81F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{111B599D-C261-4D50-8564-AFBFB8AC81F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{111B599D-C261-4D50-8564-AFBFB8AC81F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{111B599D-C261-4D50-8564-AFBFB8AC81F3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D08190A6-4254-4D81-935F-1554FA5BFB82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D08190A6-4254-4D81-935F-1554FA5BFB82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D08190A6-4254-4D81-935F-1554FA5BFB82}.Release|Any CPU.ActiveCfg = Release|Any CPU
