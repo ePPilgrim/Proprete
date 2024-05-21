@@ -13,11 +13,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataLayer", "DataLayer", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DomainLayer", "DomainLayer", "{0E056EF3-4AA5-4F0D-93C9-8EA3B10DF6AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entity", "DataLayer\Entity\Entity.csproj", "{76B7DF62-50FE-47FD-BAF1-FB740F66DF14}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entity", "DataLayer\Entity\Entity.csproj", "{76B7DF62-50FE-47FD-BAF1-FB740F66DF14}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proprette", "Proprette\Proprette.csproj", "{3EAC00B2-E97D-4BD1-BF29-76C8474D6A63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Proprette", "Proprette\Proprette.csproj", "{3EAC00B2-E97D-4BD1-BF29-76C8474D6A63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Context", "DataLayer\Context\Context.csproj", "{6D50AC10-DDC0-49FE-A682-32AD5B8A2E4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Context", "DataLayer\Context\Context.csproj", "{6D50AC10-DDC0-49FE-A682-32AD5B8A2E4C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
