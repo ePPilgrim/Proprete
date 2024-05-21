@@ -27,8 +27,4 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Domain\Proprette.Domain.csproj" />
-  </ItemGroup>
-
 </Project>

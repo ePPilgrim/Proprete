@@ -21,12 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\API\Proprette.API.csproj" />
-    <ProjectReference Include="..\Domain\Proprette.Domain.csproj" />
-    <ProjectReference Include="..\Infrastructure\Proprette.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="FileToWarehouse.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
