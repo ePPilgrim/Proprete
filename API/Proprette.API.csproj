@@ -28,8 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain\Proprette.Domain.csproj" />
-    <ProjectReference Include="..\Infrastructure\Proprette.Infrastructure.csproj" />
+    <ProjectReference Include="..\DataLayer\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

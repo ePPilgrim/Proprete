@@ -1,4 +1,4 @@
-﻿namespace Proprette.DataLayer.Entity.Category;
+﻿namespace Entity.BasicData.Category;
 
 public interface ICategory
 {

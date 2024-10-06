@@ -20,4 +20,11 @@ error NETSDK1112: The runtime pack for Microsoft.AspNetCore.App.Runtime.win-x64 
 5. Usage - kitchen, bathroom, floor, desinfection, 
 6. Volume, Color, Function, Type of substance, Brand, Purpose, Target
 7. Katrin - is the finish made products of hygiena, it include tissues, paper towels, etc.
-8. 
+
+
+EF8:
+1. Update method stay update attribute to all fields in the DB context in the case when the corresponding entity is previously remove.
+2. ExcuteRemove/Update - has nothing to do with the DB contex;
+3. In the one2one relation the main questio is how is parent and who is child. Remeber that. Child is the class that contains the FK.
+4. IsRequired configuration is used to say that this property must be specify when the row is created, other way it is not requier and could be specify later.
+5. Experiment with DB procedures (define SQL procedure in the migration files)

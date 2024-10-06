@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 //using Proprette.Domain.Context;
-using Proprette.Domain.Data.Entities;
+//using Proprette.Domain.Data.Entities;
 //using Proprette.Domain.Data.Models;
 //using Proprette.Domain.Services.DataSeeding;
 

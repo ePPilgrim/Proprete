@@ -1,23 +1,20 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using Microsoft.VisualBasic;
-using Proprette.DataLayer.Context;
-using Proprette.DataLayer.Entity.Category;
-using System.Reflection;
-using System.Runtime.InteropServices;
-
-//var interfaceCategoryType = typeof(ICategory);
-//var entityAssembly = interfaceCategoryType.Assembly;
-//var allCategoryTypes = interfaceCategoryType.Assembly.GetTypes()
-//                .Where(type => interfaceCategoryType.IsAssignableFrom(type) && type.IsClass && !type.IsAbstract);
-//var tt = typeof(Brand).Assembly;
-//foreach(var type in allCategoryTypes)
-//{
-//    Console.WriteLine(type.FullName);
-//}
-
-using var context = new PropretteDbContext();
-context.Database.EnsureCreated();
+using Microsoft.Extensions.Hosting;
+using Proprette.DataLayer.Infrastructure;
 
 
+var hostBuilder = Host.CreateDefaultBuilder(args);
+
+//var connectionString = (args.Length > 0) ? args[0] : Environment.GetEnvironmentVariable("DOTNET_CONNECTIONSTRING");
+
+var connectionString = "server=localhost;user=root;password=1;database=proprettedb1";
+
+hostBuilder.ConfigureServices(services =>
+{
+    services.AddMariaDbInfrastructure(connectionString);
+});
+
+var host = hostBuilder.Build();
+host.Start();
 
 Console.WriteLine("Hello, World!");
