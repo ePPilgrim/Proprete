@@ -1,10 +1,9 @@
-﻿namespace Entity.BasicData.Category;
+﻿namespace Proprette.DataLayer.Entity.BasicData.Category;
 
 public class FreeCode2(string name) : ICategory
 {
     public int Id { get; set; }
-    public required string Name { get; set; } = name;
-
-    private FreeCode2() : this(null!)
+    public string Name { get; set; } = name;
+    public FreeCode2() : this(null!)
     { }
 }

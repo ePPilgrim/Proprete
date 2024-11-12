@@ -1,4 +1,4 @@
-﻿namespace Entity.StaticData;
+﻿namespace Proprette.DataLayer.Entity.StaticData;
 
 public class Holding
 {

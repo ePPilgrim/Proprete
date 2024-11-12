@@ -1,6 +1,6 @@
-﻿using Entity.BasicData;
+﻿using Proprette.DataLayer.Entity.BasicData;
 
-namespace Entity.StaticData;
+namespace Proprette.DataLayer.Entity.StaticData;
 
 public class Warehouse
 {

@@ -1,8 +1,8 @@
-﻿using Entity.StaticData;
+﻿using Proprette.DataLayer.Entity.StaticData;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 
-namespace Context.Configuration;
+namespace Proprette.DataLayer.Context.Configuration;
 
 public class HoldingConfiguration : IEntityTypeConfiguration<Holding>
 {

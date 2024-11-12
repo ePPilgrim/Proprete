@@ -1,7 +1,7 @@
-﻿using Entity.BasicData;
-using Entity.Enums;
+﻿using Proprette.DataLayer.Entity.BasicData;
+using Proprette.DataLayer.Entity.Enums;
 
-namespace Entity.StaticData;
+namespace Proprette.DataLayer.Entity.StaticData;
 
 public class Transaction
 {
@@ -11,7 +11,7 @@ public class Transaction
     public Holding Holding { get; set; } = null!;
     public int UserId { get; set; }
     public User User { get; set; } = null!;
-    public DateTime DateTime { get; set; }
+    public DateOnly Date { get; set; }
     public double Nominal { get; set; }
     public double Price { get; set; }
 }

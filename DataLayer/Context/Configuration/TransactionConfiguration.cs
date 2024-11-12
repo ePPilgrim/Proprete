@@ -1,8 +1,8 @@
-﻿using Entity.StaticData;
+﻿using Proprette.DataLayer.Entity.StaticData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Context.Configuration;
+namespace Proprette.DataLayer.Context.Configuration;
 
 public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
 {
@@ -10,9 +10,11 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
     {
         builder.HasIndex(t => new
         {
-            t.DateTime,
+            t.Date,
             t.HoldingId,
             t.UserId,
         });
+
+        builder.Property<DateTime>("TS");
     }
 }

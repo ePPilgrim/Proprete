@@ -1,4 +1,4 @@
-﻿using Entity.BasicData;
+﻿using Proprette.DataLayer.Entity.BasicData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

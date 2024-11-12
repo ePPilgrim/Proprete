@@ -1,4 +1,4 @@
-﻿namespace Entity.BasicData;
+﻿namespace Proprette.DataLayer.Entity.BasicData;
 
 public class Address
 {

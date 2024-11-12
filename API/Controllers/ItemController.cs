@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-//using Proprette.Domain.Data.Entities.Category;
-//using Proprette.Domain.Context;
-//using Proprette.Domain.Data.Entities;
-//using Proprette.Domain.Data.Models;
-//using Proprette.Domain.Services;
+//using Proprette.DataLayer.Domain.Data.Entities.Category;
+//using Proprette.DataLayer.Domain.Context;
+//using Proprette.DataLayer.Domain.Data.Entities;
+//using Proprette.DataLayer.Domain.Data.Models;
+//using Proprette.DataLayer.Domain.Services;
 
-namespace Proprette.API.Controllers;
+namespace Proprette.DataLayer.API.Controllers;
 
 //[Route("[controller]")]
 //[ApiController]

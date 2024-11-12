@@ -1,6 +1,6 @@
-﻿using Entity.BasicData.Category;
+﻿using Proprette.DataLayer.Entity.BasicData.Category;
 
-namespace Entity.StaticData;
+namespace Proprette.DataLayer.Entity.StaticData;
 
 public class Item
 {

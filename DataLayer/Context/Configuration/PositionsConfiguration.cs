@@ -1,8 +1,8 @@
-﻿using Entity.ReportData;
+﻿using Proprette.DataLayer.Entity.ReportData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Context.Configuration;
+namespace Proprette.DataLayer.Context.Configuration;
 
 public class PositionsConfiguration : IEntityTypeConfiguration<Position>
 {
@@ -22,5 +22,7 @@ public class PositionsConfiguration : IEntityTypeConfiguration<Position>
                 p.HoldingId,
             })
             .IsUnique();
+
+        builder.Property<DateTime>("TS");
     }
 }

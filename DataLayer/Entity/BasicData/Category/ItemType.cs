@@ -1,10 +1,9 @@
-﻿namespace Entity.BasicData.Category;
+﻿namespace Proprette.DataLayer.Entity.BasicData.Category;
 
 public class ItemType(string name) : ICategory
 {
     public int Id { get; set; }
-    public required string Name { get; set; } = name;
-
+    public string Name { get; set; } = name;
     public ItemType() : this(null!)
     { }
 }

@@ -1,8 +1,8 @@
-﻿using Entity.BasicData;
+﻿using Proprette.DataLayer.Entity.BasicData;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 
-namespace Context.Configuration;
+namespace Proprette.DataLayer.Context.Configuration;
 
 public class UserConfiguration : IEntityTypeConfiguration<User>
 {

@@ -1,4 +1,4 @@
-﻿namespace Entity.Enums;
+﻿namespace Proprette.DataLayer.Entity.Enums;
 
 public enum TransactionCode
 {

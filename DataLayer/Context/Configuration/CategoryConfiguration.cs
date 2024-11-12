@@ -1,5 +1,4 @@
-﻿using Context.Configuration;
-using Entity.BasicData.Category;
+﻿using Proprette.DataLayer.Entity.BasicData.Category;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,11 +10,12 @@ public class CategoryConfiguration<TEntity> : IEntityTypeConfiguration<TEntity> 
     {
         builder
             .Property(x => x.Name)
-            .HasMaxLength(ConfigurationHelper.MaxLengthOfCategoryName);
+            .HasMaxLength(ConfigurationHelper.MaxLengthOfCategoryName)
+            .IsRequired();
 
         builder
             .HasAlternateKey(x => x.Name);
-
+            
         builder
             .HasKey(x => x.Id);
 

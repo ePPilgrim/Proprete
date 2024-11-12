@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-//using Proprette.Domain.Context;
-//using Proprette.Domain.Data.Entities;
-//using Proprette.Domain.Data.Models;
-//using Proprette.Domain.Services.DataSeeding;
+//using Proprette.DataLayer.Domain.Context;
+//using Proprette.DataLayer.Domain.Data.Entities;
+//using Proprette.DataLayer.Domain.Data.Models;
+//using Proprette.DataLayer.Domain.Services.DataSeeding;
 
-namespace Proprette.API.Controllers
+namespace Proprette.DataLayer.API.Controllers
 {
     //[Route("[controller]")]
     //[ApiController]

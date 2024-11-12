@@ -1,6 +1,6 @@
-﻿using Entity.StaticData;
+﻿using Proprette.DataLayer.Entity.StaticData;
 
-namespace Entity.ReportData;
+namespace Proprette.DataLayer.Entity.ReportData;
 
 public class Position
 {
