@@ -18,8 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataLayer\Context\Context.csproj" />
-    <ProjectReference Include="..\DataLayer\Entity\Entity.csproj" />
+    <ProjectReference Include="..\Context\Context.csproj" />
+    <ProjectReference Include="..\Entity\Entity.csproj" />
   </ItemGroup>
 
   <ItemGroup>
