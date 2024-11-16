@@ -1,25 +1,17 @@
 using Proprette.DataLayer.Entity.BasicData.Category;
 using Microsoft.EntityFrameworkCore;
-using Proprette.DataLayer.Context;
 using Proprette.DataLayer.Context.Configuration;
 
-namespace Proprette.DataLayer.Tests;
+namespace Proprette.DataLayer.Tests.DataLeyerTests;
 
 [TestClass]
 public class BasicDataCategoryTests
 {
-    readonly private DbContextOptions<PropretteDbContext> dbContextOptionsBuilder = 
-        new DbContextOptionsBuilder<PropretteDbContext>()
-        //.UseSqlite("DataSource=:memory:")
-        .UseMySql("server=localhost;user=root;password=1;database=DummyTestDB", new MariaDbServerVersion(new Version(10, 3, 29)))
-        .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
-        .Options;
-
     [TestMethod]
     public void DefaultCategoryTablesContainOnlyZeroRows()
     {
-        using var context= new PropretteDbContext(dbContextOptionsBuilder);
-        TestCasesHelper.InitialTableCreation(context);
+        using var context= DatabaseTestHelper.CreatePropretteDbContext();
+        DatabaseTestHelper.EnsureDatabaseCreated(context);
 
         var brand = context.Set<Brand>(); 
         var capacity = context.Set<Capacity>();
@@ -77,15 +69,15 @@ public class BasicDataCategoryTests
         Assert.AreEqual(usage?.First().Id, ConfigurationHelper.IdOfEmptyCategoryName);
         Assert.AreEqual(using_?.First().Id, ConfigurationHelper.IdOfEmptyCategoryName);
 
-        TestCasesHelper.DisposeTable(context);
+        DatabaseTestHelper.EnsureDatabaseDeleted(context);
     }
 
     [TestMethod]
     public void CanInsertNewCategory()
     {
-        using var context = new PropretteDbContext(dbContextOptionsBuilder);
-        TestCasesHelper.InitialTableCreation(context);
-        TestCasesHelper.PopulateCategoryTables(context);
+        using var context = DatabaseTestHelper.CreatePropretteDbContext();
+        DatabaseTestHelper.EnsureDatabaseCreated(context);
+        DatabaseTestHelper.SeedCategoryTables(context);
 
         Assert.IsTrue(sequenceEqual(context.Set<Brand>()));
         Assert.IsTrue(sequenceEqual(context.Set<Capacity>()));
@@ -101,7 +93,7 @@ public class BasicDataCategoryTests
         Assert.IsTrue(sequenceEqual(context.Set<Usage>()));
         Assert.IsTrue(sequenceEqual(context.Set<Using>()));
 
-        TestCasesHelper.DisposeTable(context);
+        DatabaseTestHelper.EnsureDatabaseDeleted(context);
     }
 
 #region CannotInsertDuplicateNames
@@ -188,8 +180,8 @@ public class BasicDataCategoryTests
 
     private void template_NameExceedsMaxLengthThrowsException<TEntity>() where TEntity: ICategory, new ()
     {
-        using var context = new PropretteDbContext(dbContextOptionsBuilder);
-        TestCasesHelper.InitialTableCreation(context);
+        using var context = DatabaseTestHelper.CreatePropretteDbContext();
+        DatabaseTestHelper.EnsureDatabaseCreated(context);
 
         Assert.ThrowsException<DbUpdateException>(() =>
         {
@@ -197,13 +189,13 @@ public class BasicDataCategoryTests
             context.SaveChanges();
         });
 
-        TestCasesHelper.DisposeTable(context);
+        DatabaseTestHelper.EnsureDatabaseDeleted(context);
     }
 
     private void template_CannotInsertDuplicateNames<TEntity>() where TEntity: ICategory, new()
     {
-        using var context = new PropretteDbContext(dbContextOptionsBuilder);
-        TestCasesHelper.InitialTableCreation(context);
+        using var context = DatabaseTestHelper.CreatePropretteDbContext();
+        DatabaseTestHelper.EnsureDatabaseCreated(context);
         context.Add(new TEntity() { Name = typeof(TEntity).Name });
         context.SaveChanges();
         context.ChangeTracker.Clear();
@@ -214,7 +206,7 @@ public class BasicDataCategoryTests
             context.SaveChanges();
         });
 
-        TestCasesHelper.DisposeTable(context);
+        DatabaseTestHelper.EnsureDatabaseDeleted(context);
     }
 
     private bool sequenceEqual<TEntity>(IEnumerable<TEntity> rows) where TEntity : ICategory, new()
