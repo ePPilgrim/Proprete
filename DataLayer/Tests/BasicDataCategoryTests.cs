@@ -25,7 +25,6 @@ public class BasicDataCategoryTests
         var subItem = context.Set<SubItem>();
         var unit = context.Set<Unit>();
         var usage = context.Set<Usage>();
-        var using_ = context.Set<Using>();
 
         Assert.AreEqual(brand.Count(), 1);
         Assert.AreEqual(capacity.Count(), 1);
@@ -39,7 +38,6 @@ public class BasicDataCategoryTests
         Assert.AreEqual(subItem.Count(), 1);
         Assert.AreEqual(unit.Count(), 1);
         Assert.AreEqual(usage.Count(), 1);
-        Assert.AreEqual(using_.Count(), 1);
 
         Assert.AreEqual(brand?.First().Name, string.Empty);
         Assert.AreEqual(capacity?.First().Name, string.Empty);
@@ -53,7 +51,6 @@ public class BasicDataCategoryTests
         Assert.AreEqual(subItem?.First().Name, string.Empty);
         Assert.AreEqual(unit?.First().Name, string.Empty);
         Assert.AreEqual(usage?.First().Name, string.Empty);
-        Assert.AreEqual(using_?.First().Name, string.Empty);
 
         Assert.AreEqual(brand?.First().Id, ConfigurationHelper.IdOfEmptyCategoryName);
         Assert.AreEqual(capacity?.First().Id, ConfigurationHelper.IdOfEmptyCategoryName);
@@ -67,7 +64,6 @@ public class BasicDataCategoryTests
         Assert.AreEqual(subItem?.First().Id, ConfigurationHelper.IdOfEmptyCategoryName);
         Assert.AreEqual(unit?.First().Id, ConfigurationHelper.IdOfEmptyCategoryName);
         Assert.AreEqual(usage?.First().Id, ConfigurationHelper.IdOfEmptyCategoryName);
-        Assert.AreEqual(using_?.First().Id, ConfigurationHelper.IdOfEmptyCategoryName);
 
         DatabaseTestHelper.EnsureDatabaseDeleted(context);
     }
@@ -91,7 +87,6 @@ public class BasicDataCategoryTests
         Assert.IsTrue(sequenceEqual(context.Set<SubItem>()));
         Assert.IsTrue(sequenceEqual(context.Set<Unit>()));
         Assert.IsTrue(sequenceEqual(context.Set<Usage>()));
-        Assert.IsTrue(sequenceEqual(context.Set<Using>()));
 
         DatabaseTestHelper.EnsureDatabaseDeleted(context);
     }
@@ -132,9 +127,6 @@ public class BasicDataCategoryTests
 
     [TestMethod]
     public void CannotInsertDuplicateNamesOfUsage() => template_CannotInsertDuplicateNames<Usage>();
-
-    [TestMethod]
-    public void CannotInsertDuplicateNamesOfUsing() => template_CannotInsertDuplicateNames<Using>();
     #endregion
 
 #region NameExceedsMaxLengthThrowsException
@@ -173,9 +165,6 @@ public class BasicDataCategoryTests
 
     [TestMethod]
     public void UsageNameExceedsMaxLengthThrowsException() => template_NameExceedsMaxLengthThrowsException<Usage>();
-
-    [TestMethod]
-    public void UsingNameExceedsMaxLengthThrowsException() => template_NameExceedsMaxLengthThrowsException<Using>();
     #endregion
 
     private void template_NameExceedsMaxLengthThrowsException<TEntity>() where TEntity: ICategory, new ()

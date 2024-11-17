@@ -14,8 +14,8 @@ public class BasicDataTests
         using var dbcontext = DatabaseTestHelper.CreatePropretteDbContext();
         DatabaseTestHelper.EnsureDatabaseCreated(dbcontext);
 
-        var categories = dbcontext.Set<Address>().ToList();
-        Assert.AreEqual(0, categories.Count);
+        var addresses = dbcontext.Set<Address>().ToList();
+        Assert.AreEqual(0, addresses.Count);
 
         DatabaseTestHelper.EnsureDatabaseDeleted(dbcontext);
     }
@@ -107,9 +107,9 @@ public class BasicDataTests
         using var dbcontext = DatabaseTestHelper.CreatePropretteDbContext();
         DatabaseTestHelper.EnsureDatabaseCreated(dbcontext);
 
-        var categories = dbcontext.Set<User>().ToList();
+        var users = dbcontext.Set<User>().ToList();
 
-        Assert.AreEqual(0, categories.Count);
+        Assert.AreEqual(0, users.Count);
 
         DatabaseTestHelper.EnsureDatabaseDeleted(dbcontext);
     }

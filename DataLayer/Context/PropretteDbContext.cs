@@ -24,6 +24,5 @@ public class PropretteDbContext : DbContext
         modelBuilder.ApplyConfiguration(new CategoryConfiguration<SubItem>());
         modelBuilder.ApplyConfiguration(new CategoryConfiguration<Unit>());
         modelBuilder.ApplyConfiguration(new CategoryConfiguration<Usage>());
-        modelBuilder.ApplyConfiguration(new CategoryConfiguration<Using>());
     }
 }
