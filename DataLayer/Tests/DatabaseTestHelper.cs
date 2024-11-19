@@ -9,7 +9,7 @@ namespace Proprette.DataLayer.Tests.DataLeyerTests;
 
 internal static class DatabaseTestHelper
 {
-    public static PropretteDbContext CreatePropretteDbContext()
+    internal static PropretteDbContext CreatePropretteDbContext()
     {
         var dbContextOptionsBuilder = new DbContextOptionsBuilder<PropretteDbContext>()
              //.UseSqlite("DataSource=:memory:")
@@ -22,21 +22,21 @@ internal static class DatabaseTestHelper
         return dbContext;
     }
 
-    public static void EnsureDatabaseCreated(PropretteDbContext dbcontext)
+    internal static void EnsureDatabaseCreated(PropretteDbContext dbcontext)
     {
-        //dbcontext.Database.OpenConnection();
+        //dbContext.Database.OpenConnection();
         if (dbcontext.Database.EnsureCreated()) return;    
         dbcontext.Database.EnsureDeleted();
         dbcontext.Database.EnsureCreated();
     }
 
-    public static void EnsureDatabaseDeleted(PropretteDbContext dbcontext)
+    internal static void EnsureDatabaseDeleted(PropretteDbContext dbcontext)
     {
         dbcontext.Database.EnsureDeleted();
-        //dbcontext.Database.CloseConnection();
+        //dbContext.Database.CloseConnection();
     }
 
-    public static void SeedCategoryTables(PropretteDbContext dbContext)
+    internal static void SeedCategoryTables(PropretteDbContext dbContext)
     {
         addCategory<Brand>(dbContext);
         addCategory<Capacity>(dbContext);
@@ -50,20 +50,22 @@ internal static class DatabaseTestHelper
         addCategory<SubItem>(dbContext);
         addCategory<Unit>(dbContext);
         addCategory<Usage>(dbContext);
+        dbContext.ChangeTracker.Clear();
     }
 
-    public static void SeedAddressTable(PropretteDbContext dbcontext)
+    internal static void SeedAddressTable(PropretteDbContext dbContext)
     {
         var addresses = new List<Address>(){
            new() { Name = "Name1", City = "City1", Street = "Street1", Building = "Building1", ZipCode = "ZipCode" },
            new() { Name = "Name2", City = "City2", Street = "Street1", Building = "Building1", ZipCode = "ZipCode" },
            new() { Name = "Name3", City = "City2", Street = "Street1", Building = "Building3", ZipCode = "ZipCode" },
         };
-        dbcontext.AddRange(addresses);
-        dbcontext.SaveChanges();
+        dbContext.AddRange(addresses);
+        dbContext.SaveChanges();
+        dbContext.ChangeTracker.Clear();
     }
 
-    public static void SeedUserTable(PropretteDbContext dbContext)
+    internal static void SeedUserTable(PropretteDbContext dbContext)
     {
         var users = new List<User>(){
             new User() { Name = "Name1", FirstName = "FirstName1", LastName = "LastName1", Email = "Email1" },
@@ -72,9 +74,10 @@ internal static class DatabaseTestHelper
         };
         dbContext.AddRange(users);
         dbContext.SaveChanges();
+        dbContext.ChangeTracker.Clear();
     }
 
-    public static void SeedItemTable(PropretteDbContext dbContext)
+    internal static void SeedItemTable(PropretteDbContext dbContext)
     {
         var rows = new List<Item>() {
             new()
@@ -135,6 +138,29 @@ internal static class DatabaseTestHelper
             FreeCode3Id = ConfigurationHelper.IdOfEmptyCategoryName
         });
         dbContext.SaveChanges();
+        dbContext.ChangeTracker.Clear();
+    }
+
+    internal static void SeedWarehouseTable(PropretteDbContext dbContext)
+    {
+        SeedAddressTable(dbContext);
+        var addresses = dbContext.Set<Address>().Select(a => a.Id).ToList();
+        var warehouses = Enumerable.Range(0, addresses.Count).Select( i => new Warehouse() { Name = $"Warehouse{i}", AddressId = addresses[i]});
+        dbContext.AddRange(warehouses);
+        dbContext.SaveChanges();
+        dbContext.ChangeTracker.Clear();    
+    }
+
+    internal static void SeedHoldingTable(PropretteDbContext dbContext)
+    {
+        SeedItemTable(dbContext);
+        SeedWarehouseTable(dbContext);
+        var items = dbContext.Set<Item>().Select(i => i.Id).ToList();
+        var warehouses = dbContext.Set<Warehouse>().Select(w => w.Id).ToList();
+        var holdings = items.SelectMany(i => warehouses.Select(w => new Holding() { ItemId = i, WarehouseId = w }));
+        dbContext.AddRange(holdings);
+        dbContext.SaveChanges();
+        dbContext.ChangeTracker.Clear();
     }
 
     private static void addCategory<TEntity>(PropretteDbContext dbcontext) where TEntity : class, ICategory, new()
@@ -146,4 +172,6 @@ internal static class DatabaseTestHelper
         dbcontext.AddRange(categories);
         dbcontext.SaveChanges();
     }
+
+
 }

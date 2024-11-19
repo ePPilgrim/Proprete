@@ -9,45 +9,40 @@ namespace Proprette.DataLayer.Tests.DataLayerTests;
 [TestClass]
 public class StaticDataTests
 {
+#region Item Table Tests
     [TestMethod]
-    public void ItemTableShouldNotContainZeroRowsByDefault()
+    public void ItemTable_ShouldNotContainZeroRowsByDefault()
     {
         // Arrange
         using var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
         DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
-
         // Act
         var actualItems = dbContext.Set<Item>().ToList();
-
         // Assert
         Assert.AreEqual(0, actualItems.Count);
-
         DatabaseTestHelper.EnsureDatabaseDeleted(dbContext);
     }
 
     [TestMethod]
-    public void ItemTableShouldHaveUniqueIndexOnAllCategoryFields()
+    public void ItemTable_ShouldHaveUniqueIndexOnAllCategoryFields()
     {
         // Arrange
         var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
         DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
         DatabaseTestHelper.SeedItemTable(dbContext);
-        var record = dbContext.Set<Item>().Where(x => x.Name == "Item").FirstOrDefault();
+        var record = dbContext.Set<Item>().FirstOrDefault(x => x.Name == "Item");
         dbContext.ChangeTracker.Clear();
-
         // Act
         Assert.IsNotNull(record);
         record.Name = "NewItem";
         dbContext.Add(record);
-
         // Assert
         Assert.ThrowsException<DbUpdateException>(() => dbContext.SaveChanges());
-
         DatabaseTestHelper.EnsureDatabaseDeleted(dbContext);
     }
 
     [TestMethod]
-    public void ItemTableShouldAllowMultipleRowsWithSameNameField()
+    public void ItemTable_ShouldAllowMultipleRowsWithSameNameField()
     {
         // Arrange
         var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
@@ -69,27 +64,23 @@ public class StaticDataTests
             FreeCode2 = new FreeCode2 { Name = "NewFreeCode2" },
             FreeCode3 = new FreeCode3 { Name = "NewFreeCode3" }
         };
-
         // Act
         dbContext.Add(newRecord);
         dbContext.SaveChanges();
         dbContext.ChangeTracker.Clear();
         var actualRecords = dbContext.Set<Item>().Where(item => item.Name == "Item").ToList();
-
         // Assert
         Assert.AreEqual(2, actualRecords.Count);
-
         DatabaseTestHelper.EnsureDatabaseDeleted(dbContext);
     }
 
     [TestMethod]
-    public void ItemTableShouldAllowRowWithEmptyCategoryFields()
+    public void ItemTable_ShouldAllowRowWithEmptyCategoryFields()
     {
         // Arrange
         var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
         DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
         DatabaseTestHelper.SeedItemTable(dbContext);
-
         // Act
         var actualRows = dbContext.Set<Item>().Where(x =>
             x.BrandId == ConfigurationHelper.IdOfEmptyCategoryName
@@ -129,23 +120,20 @@ public class StaticDataTests
             + x.FreeCode2.Name
             + x.FreeCode3.Name)
             .ToList();
-
         // Assert
         Assert.AreEqual(1, actualRows.Count);
         Assert.AreEqual(string.Empty, actualRows[0]);
-
         DatabaseTestHelper.EnsureDatabaseDeleted(dbContext);
     }
 
     [TestMethod]
-    public void ItemTableShouldAllowNewRecordInsertion()
+    public void ItemTable_ShouldAllowNewRecordInsertion()
     {
         // Arrange
         var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
         DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
         DatabaseTestHelper.SeedItemTable(dbContext);
         dbContext.ChangeTracker.Clear();
-
         // Act
         var actualResult = dbContext.Set<Item>()
             .Select(item => item.Name
@@ -162,13 +150,142 @@ public class StaticDataTests
                 + item.FreeCode2.Name
                 + item.FreeCode3.Name)
             .ToList();
-
         // Assert
         Assert.IsTrue(actualResult.Count == 3);
         Assert.IsTrue(actualResult.Contains("ItemBrandItemTypeUsageColorCapacitySizeUnitSubItemCompositionFreeCode1FreeCode2FreeCode3"));
         Assert.IsTrue(actualResult.Contains("EmptyCategories"));
         Assert.IsTrue(actualResult.Contains("BrandUsageCapacityUnitCompositionFreeCode2"));
-
         DatabaseTestHelper.EnsureDatabaseDeleted(dbContext);
     }
+    #endregion
+
+#region Warehouse Table Tests
+    [TestMethod]
+    public void WarehouseTable_ShouldBeEmptyInitially()
+    {
+        // Arrange
+        var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
+        DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
+        // Act
+        var actualWarehouses = dbContext.Set<Warehouse>().ToList();
+        // Assert
+        Assert.AreEqual(0, actualWarehouses.Count);
+        DatabaseTestHelper.EnsureDatabaseDeleted(dbContext);
+    }
+
+    [TestMethod]
+    public void WarehouseTable_ShouldHaveUniqueNameField()
+    {
+        // Arrange
+        var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
+        DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
+        DatabaseTestHelper.SeedWarehouseTable(dbContext);
+        var record = dbContext.Set<Warehouse>().FirstOrDefault(w => w.Name == "Warehouse0");
+        dbContext.ChangeTracker.Clear();
+        // Act
+        Assert.IsNotNull(record);
+        record.Name = "Warehouse1";
+        dbContext.Add(record);
+        // Assert
+        Assert.ThrowsException<DbUpdateException>(() => dbContext.SaveChanges());
+        DatabaseTestHelper.EnsureDatabaseDeleted(dbContext);
+    }
+
+    [TestMethod]
+    public void WarehouseTable_ShouldHaveUniqueIndexOnAddressIdField()
+    {
+        // Arrange
+        var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
+        DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
+        DatabaseTestHelper.SeedWarehouseTable(dbContext);
+        var record = dbContext.Set<Warehouse>().FirstOrDefault();
+        dbContext.ChangeTracker.Clear();
+        // Act
+        Assert.IsNotNull(record);
+        record.Name = "NewWarehouse";
+        dbContext.Add(record);
+        // Assert
+        Assert.ThrowsException<DbUpdateException>(() => dbContext.SaveChanges());
+        DatabaseTestHelper.EnsureDatabaseDeleted(dbContext);
+    }
+
+    [TestMethod]
+    public void WarehouseTable_ShouldAllowNewRecordInsertion()
+    {
+        // Arrange
+        var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
+        DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
+        DatabaseTestHelper.SeedWarehouseTable(dbContext);
+        dbContext.ChangeTracker.Clear();
+        // Act
+        var actualResult = dbContext.Set<Warehouse>().Select(warehouse => warehouse.Name).ToList();
+        // Assert
+        Assert.IsTrue(actualResult.Count == 3);
+        Assert.AreEqual("Warehouse0", actualResult[0]);
+        Assert.AreEqual("Warehouse1", actualResult[1]);
+        Assert.AreEqual("Warehouse2", actualResult[2]);
+        DatabaseTestHelper.EnsureDatabaseDeleted(dbContext);
+    }
+    #endregion
+
+#region Holding Table Tests
+    [TestMethod]
+    public void HoldingTable_ShouldNotContainZeroRowsByDefault()
+    {
+        // Arrange
+        using var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
+        DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
+        // Act
+        var actualHoldings = dbContext.Set<Holding>().ToList();
+        // Assert
+        Assert.AreEqual(0, actualHoldings.Count);
+        DatabaseTestHelper.EnsureDatabaseDeleted(dbContext);
+    }
+
+    [TestMethod]
+    public void HoldingTable_ShouldHaveUniqueIndexOnItemIdAndWarehouseIdFields()
+    {
+        // Arrange
+        var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
+        DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
+        DatabaseTestHelper.SeedHoldingTable(dbContext);
+        var record = dbContext.Set<Holding>().FirstOrDefault();
+        dbContext.ChangeTracker.Clear();
+        // Act
+        Assert.IsNotNull(record);
+        record.Id = 0;
+        dbContext.Add(record);
+        // Assert
+        Assert.ThrowsException<DbUpdateException>(() => dbContext.SaveChanges());
+        DatabaseTestHelper.EnsureDatabaseDeleted(dbContext);
+    }
+
+    [TestMethod]
+    public void HoldingTable_ShouldAllowNewRecordInsertion()
+    {
+        // Arrange
+        var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
+        DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
+        DatabaseTestHelper.SeedHoldingTable(dbContext);
+        dbContext.ChangeTracker.Clear();
+        // Act
+        var actualResult = dbContext.Set<Holding>()
+            .Include(h => h.Item)
+            .Include(h => h.Warehouse)
+            .Select(h => h.Item.Name + h.Warehouse.Name)
+            .ToList();
+        // Assert
+        Assert.IsTrue(actualResult.Count == 9);
+        Assert.IsTrue(actualResult.Contains("ItemWarehouse0"));
+        Assert.IsTrue(actualResult.Contains("ItemWarehouse1"));
+        Assert.IsTrue(actualResult.Contains("ItemWarehouse2"));
+        Assert.IsTrue(actualResult.Contains("EmptyCategoriesWarehouse0"));
+        Assert.IsTrue(actualResult.Contains("EmptyCategoriesWarehouse1"));
+        Assert.IsTrue(actualResult.Contains("EmptyCategoriesWarehouse2"));
+        Assert.IsTrue(actualResult.Contains("Warehouse0"));
+        Assert.IsTrue(actualResult.Contains("Warehouse1"));
+        Assert.IsTrue(actualResult.Contains("Warehouse2"));
+        DatabaseTestHelper.EnsureDatabaseDeleted(dbContext);
+    }
+    #endregion
 }
