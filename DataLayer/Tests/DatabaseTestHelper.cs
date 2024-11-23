@@ -4,9 +4,10 @@ using Proprette.DataLayer.Context.Configuration;
 using Proprette.DataLayer.Entity.BasicData;
 using Proprette.DataLayer.Entity.BasicData.Category;
 using Proprette.DataLayer.Entity.Enums;
+using Proprette.DataLayer.Entity.ReportData;
 using Proprette.DataLayer.Entity.StaticData;
 
-namespace Proprette.DataLayer.Tests.DataLeyerTests;
+namespace Proprette.DataLayer.Tests.DataLayerTests;
 
 internal static class DatabaseTestHelper
 {
@@ -191,10 +192,25 @@ internal static class DatabaseTestHelper
         ).ToList();
         Enumerable.Range(0, transactions.Count).ToList().ForEach(i => transactions[i].Nominal = i); 
         Enumerable.Range(0, transactions.Count).ToList().ForEach(i => transactions[i].Price = (double)2*i);
-
-
-
         dbContext.AddRange(transactions);
+        dbContext.SaveChanges();
+    }
+
+    internal static void SeedPositionTable(PropretteDbContext dbContext)
+    {
+        SeedHoldingTable(dbContext);
+        var holdings = dbContext.Set<Holding>().Select(h => h.Id).ToList();
+        var dates = Enumerable.Range(0, 3).Select(i => new DateOnly(2021 + i, 1 + i, 1 + i)).ToList();
+        var positions = holdings.SelectMany(h =>
+            dates.Select(d => new Position()
+            {
+                HoldingId = h,
+                Date = d,
+                BalanceNominal = 1
+            })
+        ).ToList();
+        Enumerable.Range(0, positions.Count).ToList().ForEach(i => positions[i].BalanceNominal = i + 1);
+        dbContext.AddRange(positions);
         dbContext.SaveChanges();
     }
 

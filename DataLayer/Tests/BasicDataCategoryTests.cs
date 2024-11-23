@@ -2,17 +2,18 @@ using Proprette.DataLayer.Entity.BasicData.Category;
 using Microsoft.EntityFrameworkCore;
 using Proprette.DataLayer.Context.Configuration;
 
-namespace Proprette.DataLayer.Tests.DataLeyerTests;
+namespace Proprette.DataLayer.Tests.DataLayerTests;
 
 [TestClass]
 public class BasicDataCategoryTests
 {
     [TestMethod]
-    public void DefaultCategoryTablesContainOnlyZeroRows()
+    public void CategoryTables_ShouldInsertZeroRowsByDefault()
     {
+        // Arrange
         using var context= DatabaseTestHelper.CreatePropretteDbContext();
         DatabaseTestHelper.EnsureDatabaseCreated(context);
-
+        // Act
         var brand = context.Set<Brand>(); 
         var capacity = context.Set<Capacity>();
         var color = context.Set<Color>();
@@ -25,7 +26,7 @@ public class BasicDataCategoryTests
         var subItem = context.Set<SubItem>();
         var unit = context.Set<Unit>();
         var usage = context.Set<Usage>();
-
+        // Assert
         Assert.AreEqual(brand.Count(), 1);
         Assert.AreEqual(capacity.Count(), 1);
         Assert.AreEqual(color.Count(), 1);
@@ -38,7 +39,6 @@ public class BasicDataCategoryTests
         Assert.AreEqual(subItem.Count(), 1);
         Assert.AreEqual(unit.Count(), 1);
         Assert.AreEqual(usage.Count(), 1);
-
         Assert.AreEqual(brand?.First().Name, string.Empty);
         Assert.AreEqual(capacity?.First().Name, string.Empty);
         Assert.AreEqual(color?.First().Name, string.Empty);
@@ -51,7 +51,6 @@ public class BasicDataCategoryTests
         Assert.AreEqual(subItem?.First().Name, string.Empty);
         Assert.AreEqual(unit?.First().Name, string.Empty);
         Assert.AreEqual(usage?.First().Name, string.Empty);
-
         Assert.AreEqual(brand?.First().Id, ConfigurationHelper.IdOfEmptyCategoryName);
         Assert.AreEqual(capacity?.First().Id, ConfigurationHelper.IdOfEmptyCategoryName);
         Assert.AreEqual(color?.First().Id, ConfigurationHelper.IdOfEmptyCategoryName);
@@ -64,17 +63,18 @@ public class BasicDataCategoryTests
         Assert.AreEqual(subItem?.First().Id, ConfigurationHelper.IdOfEmptyCategoryName);
         Assert.AreEqual(unit?.First().Id, ConfigurationHelper.IdOfEmptyCategoryName);
         Assert.AreEqual(usage?.First().Id, ConfigurationHelper.IdOfEmptyCategoryName);
-
         DatabaseTestHelper.EnsureDatabaseDeleted(context);
     }
 
     [TestMethod]
-    public void CanInsertNewCategory()
+    public void CategoryTables_ShouldInsertNewCategory()
     {
+        // Arrange
         using var context = DatabaseTestHelper.CreatePropretteDbContext();
         DatabaseTestHelper.EnsureDatabaseCreated(context);
+        // Act
         DatabaseTestHelper.SeedCategoryTables(context);
-
+        // Act
         Assert.IsTrue(sequenceEqual(context.Set<Brand>()));
         Assert.IsTrue(sequenceEqual(context.Set<Capacity>()));
         Assert.IsTrue(sequenceEqual(context.Set<Color>()));
@@ -87,46 +87,45 @@ public class BasicDataCategoryTests
         Assert.IsTrue(sequenceEqual(context.Set<SubItem>()));
         Assert.IsTrue(sequenceEqual(context.Set<Unit>()));
         Assert.IsTrue(sequenceEqual(context.Set<Usage>()));
-
         DatabaseTestHelper.EnsureDatabaseDeleted(context);
     }
 
 #region CannotInsertDuplicateNames
         [TestMethod]
-    public void CannotInsertDuplicateNamesOfBrand() => template_CannotInsertDuplicateNames<Brand>();
+    public void CategoryTables_ShouldNotInsertDuplicateNamesOfBrand() => template_CategoryTable_ShouldNotInsertDuplicateNames<Brand>();
 
     [TestMethod]
-    public void CannotInsertDuplicateNamesOfCapacity() => template_CannotInsertDuplicateNames<Capacity>();
+    public void CategoryTables_ShouldNotInsertDuplicateNamesOfCapacity() => template_CategoryTable_ShouldNotInsertDuplicateNames<Capacity>();
 
     [TestMethod]
-    public void CannotInsertDuplicateNamesOfColor() => template_CannotInsertDuplicateNames<Color>();
+    public void CategoryTables_ShouldNotInsertDuplicateNamesOfColor() => template_CategoryTable_ShouldNotInsertDuplicateNames<Color>();
 
     [TestMethod]
-    public void CannotInsertDuplicateNamesOfComposition() => template_CannotInsertDuplicateNames<Composition>();
+    public void CategoryTables_ShouldNotInsertDuplicateNamesOfComposition() => template_CategoryTable_ShouldNotInsertDuplicateNames<Composition>();
 
     [TestMethod]
-    public void CannotInsertDuplicateNamesOfFreeCode1() => template_CannotInsertDuplicateNames<FreeCode1>();
+    public void CategoryTables_ShouldNotInsertDuplicateNamesOfFreeCode1() => template_CategoryTable_ShouldNotInsertDuplicateNames<FreeCode1>();
 
     [TestMethod]
-    public void CannotInsertDuplicateNamesOfFreeCode2() => template_CannotInsertDuplicateNames<FreeCode2>();
+    public void CategoryTables_ShouldNotInsertDuplicateNamesOfFreeCode2() => template_CategoryTable_ShouldNotInsertDuplicateNames<FreeCode2>();
 
     [TestMethod]
-    public void CannotInsertDuplicateNamesOfFreeCode3() => template_CannotInsertDuplicateNames<FreeCode3>();
+    public void CategoryTables_ShouldNotInsertDuplicateNamesOfFreeCode3() => template_CategoryTable_ShouldNotInsertDuplicateNames<FreeCode3>();
 
     [TestMethod]
-    public void CannotInsertDuplicateNamesOfItemType() => template_CannotInsertDuplicateNames<ItemType>();
+    public void CategoryTables_ShouldNotInsertDuplicateNamesOfItemType() => template_CategoryTable_ShouldNotInsertDuplicateNames<ItemType>();
 
     [TestMethod]
-    public void CannotInsertDuplicateNamesOfSize() => template_CannotInsertDuplicateNames<Size>();
+    public void CategoryTables_ShouldNotInsertDuplicateNamesOfSize() => template_CategoryTable_ShouldNotInsertDuplicateNames<Size>();
 
     [TestMethod]
-    public void CannotInsertDuplicateNamesOfSubItem() => template_CannotInsertDuplicateNames<SubItem>();
+    public void CategoryTables_ShouldNotInsertDuplicateNamesOfSubItem() => template_CategoryTable_ShouldNotInsertDuplicateNames<SubItem>();
 
     [TestMethod]
-    public void CannotInsertDuplicateNamesOfUnit() => template_CannotInsertDuplicateNames<Unit>();
+    public void CategoryTables_ShouldNotInsertDuplicateNamesOfUnit() => template_CategoryTable_ShouldNotInsertDuplicateNames<Unit>();
 
     [TestMethod]
-    public void CannotInsertDuplicateNamesOfUsage() => template_CannotInsertDuplicateNames<Usage>();
+    public void CategoryTables_ShouldNotInsertDuplicateNamesOfUsage() => template_CategoryTable_ShouldNotInsertDuplicateNames<Usage>();
     #endregion
 
 #region NameExceedsMaxLengthThrowsException
@@ -169,32 +168,33 @@ public class BasicDataCategoryTests
 
     private void template_NameExceedsMaxLengthThrowsException<TEntity>() where TEntity: ICategory, new ()
     {
+        // Arrange
         using var context = DatabaseTestHelper.CreatePropretteDbContext();
         DatabaseTestHelper.EnsureDatabaseCreated(context);
-
+        // Assert
         Assert.ThrowsException<DbUpdateException>(() =>
         {
             context.Add(new TEntity() { Name = "123456789012345678901234567890123" });
             context.SaveChanges();
         });
-
         DatabaseTestHelper.EnsureDatabaseDeleted(context);
     }
 
-    private void template_CannotInsertDuplicateNames<TEntity>() where TEntity: ICategory, new()
+    private void template_CategoryTable_ShouldNotInsertDuplicateNames<TEntity>() where TEntity: ICategory, new()
     {
+        // Arrange
         using var context = DatabaseTestHelper.CreatePropretteDbContext();
         DatabaseTestHelper.EnsureDatabaseCreated(context);
+        // Act
         context.Add(new TEntity() { Name = typeof(TEntity).Name });
         context.SaveChanges();
         context.ChangeTracker.Clear();
-
+        // Assert
         Assert.ThrowsException<DbUpdateException>(() =>
         {
             context.Add(new TEntity() { Name = typeof(TEntity).Name });
             context.SaveChanges();
         });
-
         DatabaseTestHelper.EnsureDatabaseDeleted(context);
     }
 

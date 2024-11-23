@@ -23,6 +23,6 @@ public class PositionsConfiguration : IEntityTypeConfiguration<Position>
             })
             .IsUnique();
 
-        builder.Property<DateTime>("TS");
+        builder.Property<DateTime>("TimeStamp").HasDefaultValueSql("NOW()");
     }
 }

@@ -2,7 +2,6 @@
 using Proprette.DataLayer.Context.Configuration;
 using Proprette.DataLayer.Entity.BasicData.Category;
 using Proprette.DataLayer.Entity.StaticData;
-using Proprette.DataLayer.Tests.DataLeyerTests;
 
 namespace Proprette.DataLayer.Tests.DataLayerTests;
 
@@ -27,7 +26,7 @@ public class StaticDataTests
     public void ItemTable_ShouldHaveUniqueIndexOnAllCategoryFields()
     {
         // Arrange
-        var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
+        using var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
         DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
         DatabaseTestHelper.SeedItemTable(dbContext);
         var record = dbContext.Set<Item>().FirstOrDefault(x => x.Name == "Item");
@@ -45,7 +44,7 @@ public class StaticDataTests
     public void ItemTable_ShouldAllowMultipleRowsWithSameNameField()
     {
         // Arrange
-        var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
+        using var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
         DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
         DatabaseTestHelper.SeedItemTable(dbContext);
         var newRecord = new Item
@@ -78,7 +77,7 @@ public class StaticDataTests
     public void ItemTable_ShouldAllowRowWithEmptyCategoryFields()
     {
         // Arrange
-        var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
+        using var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
         DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
         DatabaseTestHelper.SeedItemTable(dbContext);
         // Act
@@ -130,7 +129,7 @@ public class StaticDataTests
     public void ItemTable_ShouldAllowNewRecordInsertion()
     {
         // Arrange
-        var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
+        using var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
         DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
         DatabaseTestHelper.SeedItemTable(dbContext);
         dbContext.ChangeTracker.Clear();
@@ -164,7 +163,7 @@ public class StaticDataTests
     public void WarehouseTable_ShouldBeEmptyInitially()
     {
         // Arrange
-        var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
+        using var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
         DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
         // Act
         var actualWarehouses = dbContext.Set<Warehouse>().ToList();
@@ -177,7 +176,7 @@ public class StaticDataTests
     public void WarehouseTable_ShouldHaveUniqueNameField()
     {
         // Arrange
-        var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
+        using var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
         DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
         DatabaseTestHelper.SeedWarehouseTable(dbContext);
         var record = dbContext.Set<Warehouse>().FirstOrDefault(w => w.Name == "Warehouse0");
@@ -195,7 +194,7 @@ public class StaticDataTests
     public void WarehouseTable_ShouldHaveUniqueIndexOnAddressIdField()
     {
         // Arrange
-        var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
+        using var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
         DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
         DatabaseTestHelper.SeedWarehouseTable(dbContext);
         var record = dbContext.Set<Warehouse>().FirstOrDefault();
@@ -213,7 +212,7 @@ public class StaticDataTests
     public void WarehouseTable_ShouldAllowNewRecordInsertion()
     {
         // Arrange
-        var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
+        using var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
         DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
         DatabaseTestHelper.SeedWarehouseTable(dbContext);
         dbContext.ChangeTracker.Clear();
@@ -246,7 +245,7 @@ public class StaticDataTests
     public void HoldingTable_ShouldHaveUniqueIndexOnItemIdAndWarehouseIdFields()
     {
         // Arrange
-        var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
+        using var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
         DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
         DatabaseTestHelper.SeedHoldingTable(dbContext);
         var record = dbContext.Set<Holding>().FirstOrDefault();
@@ -264,7 +263,7 @@ public class StaticDataTests
     public void HoldingTable_ShouldAllowNewRecordInsertion()
     {
         // Arrange
-        var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
+        using var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
         DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
         DatabaseTestHelper.SeedHoldingTable(dbContext);
         dbContext.ChangeTracker.Clear();
@@ -296,10 +295,8 @@ public class StaticDataTests
         // Arrange
         using var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
         DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
-
         // Act
         var actualTransactions = dbContext.Set<Transaction>().ToList();
-
         // Assert
         Assert.AreEqual(0, actualTransactions.Count);
         DatabaseTestHelper.EnsureDatabaseDeleted(dbContext);
@@ -309,10 +306,9 @@ public class StaticDataTests
     public void TransactionTable_ShouldAllowNewRecordInsertion()
     {
         // Arrange
-        var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
+        using var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
         DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
         DatabaseTestHelper.SeedTransactionTable(dbContext);
-
         // Act
         var actualResult = dbContext.Set<Transaction>()
             .Include(t => t.Holding)
@@ -331,7 +327,6 @@ public class StaticDataTests
         Assert.IsTrue(actualResult.Contains("Name12021-01-01060120"));
         Assert.IsTrue(actualResult.Contains("Name22021-01-02277154"));
         Assert.IsTrue(actualResult.Contains("Name32021-01-01484168"));
-
         DatabaseTestHelper.EnsureDatabaseDeleted(dbContext);
     }
 
@@ -340,10 +335,9 @@ public class StaticDataTests
     {
         // Arrange
         var rnd = new Random();
-        var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
+        using var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
         DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
         DatabaseTestHelper.SeedTransactionTable(dbContext);
-
         // Act
         var timeSeries = dbContext.Set<Transaction>()
             .AsTracking()
@@ -352,10 +346,8 @@ public class StaticDataTests
             .OrderBy(x => rnd.Next());
         var sortedByTimeStamp = timeSeries.OrderBy(x => x.TimeStamp).ToList();
         var sortedById = timeSeries.OrderBy(x => x.Id).ToList();
-
         // Assert
         Assert.IsTrue(sortedById.SequenceEqual(sortedByTimeStamp));
-
         DatabaseTestHelper.EnsureDatabaseDeleted(dbContext);
     }
 #endregion
