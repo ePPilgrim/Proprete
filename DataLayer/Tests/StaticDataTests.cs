@@ -288,4 +288,75 @@ public class StaticDataTests
         DatabaseTestHelper.EnsureDatabaseDeleted(dbContext);
     }
     #endregion
+
+#region Transaction Table Tests
+    [TestMethod]
+    public void TransactionTable_ShouldNotContainZeroRowsByDefault()
+    {
+        // Arrange
+        using var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
+        DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
+
+        // Act
+        var actualTransactions = dbContext.Set<Transaction>().ToList();
+
+        // Assert
+        Assert.AreEqual(0, actualTransactions.Count);
+        DatabaseTestHelper.EnsureDatabaseDeleted(dbContext);
+    }
+
+    [TestMethod]
+    public void TransactionTable_ShouldAllowNewRecordInsertion()
+    {
+        // Arrange
+        var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
+        DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
+        DatabaseTestHelper.SeedTransactionTable(dbContext);
+
+        // Act
+        var actualResult = dbContext.Set<Transaction>()
+            .Include(t => t.Holding)
+            .Include(t => t.User)
+            .Select(t => t.Holding.Item.Name + t.User.Name + t.Date + t.TransactionCode + t.Nominal + t.Price)
+            .ToList();
+
+        // Assert
+        Assert.IsTrue(actualResult.Count == 270);
+        Assert.IsTrue(actualResult.Contains("EmptyCategoriesName12021-01-01000"));
+        Assert.IsTrue(actualResult.Contains("EmptyCategoriesName32021-01-0242958"));
+        Assert.IsTrue(actualResult.Contains("EmptyCategoriesName22021-01-023198396"));
+        Assert.IsTrue(actualResult.Contains("ItemName12021-01-0113162"));
+        Assert.IsTrue(actualResult.Contains("ItemName22021-01-0224794"));
+        Assert.IsTrue(actualResult.Contains("ItemName32021-01-013143286"));
+        Assert.IsTrue(actualResult.Contains("Name12021-01-01060120"));
+        Assert.IsTrue(actualResult.Contains("Name22021-01-02277154"));
+        Assert.IsTrue(actualResult.Contains("Name32021-01-01484168"));
+
+        DatabaseTestHelper.EnsureDatabaseDeleted(dbContext);
+    }
+
+    [TestMethod]
+    public void TransactionTable_ShouldHaveTimeStampFieldWithDefaultValue()
+    {
+        // Arrange
+        var rnd = new Random();
+        var dbContext = DatabaseTestHelper.CreatePropretteDbContext();
+        DatabaseTestHelper.EnsureDatabaseCreated(dbContext);
+        DatabaseTestHelper.SeedTransactionTable(dbContext);
+
+        // Act
+        var timeSeries = dbContext.Set<Transaction>()
+            .AsTracking()
+            .Select(x => new { x.Id, TimeStamp = EF.Property<DateTime>(x, "TimeStamp").Ticks })
+            .ToList()
+            .OrderBy(x => rnd.Next());
+        var sortedByTimeStamp = timeSeries.OrderBy(x => x.TimeStamp).ToList();
+        var sortedById = timeSeries.OrderBy(x => x.Id).ToList();
+
+        // Assert
+        Assert.IsTrue(sortedById.SequenceEqual(sortedByTimeStamp));
+
+        DatabaseTestHelper.EnsureDatabaseDeleted(dbContext);
+    }
+#endregion
 }

@@ -3,6 +3,7 @@ using Proprette.DataLayer.Context;
 using Proprette.DataLayer.Context.Configuration;
 using Proprette.DataLayer.Entity.BasicData;
 using Proprette.DataLayer.Entity.BasicData.Category;
+using Proprette.DataLayer.Entity.Enums;
 using Proprette.DataLayer.Entity.StaticData;
 
 namespace Proprette.DataLayer.Tests.DataLeyerTests;
@@ -163,6 +164,40 @@ internal static class DatabaseTestHelper
         dbContext.ChangeTracker.Clear();
     }
 
+    internal static void SeedTransactionTable(PropretteDbContext dbContext)
+    {
+        SeedHoldingTable(dbContext);
+        SeedUserTable(dbContext);
+        var holdings = dbContext.Set<Holding>().Select(h => h.Id).ToList();
+        var users = dbContext.Set<User>().Select(u => u.Id).ToList();
+        var dates = Enumerable.Range(0, 2).Select(i => new DateOnly(2021, 1, i + 1)).ToList();
+        var transactionCodes = Enum.GetValues<TransactionCode>().Cast<TransactionCode>().ToList();
+        var transactions = holdings.SelectMany(h =>
+            users.SelectMany(u =>
+                dates.SelectMany(d =>
+                    transactionCodes.Select(tc =>
+                        new Transaction()
+                        {
+                            HoldingId = h,
+                            UserId = u,
+                            Date = d,
+                            TransactionCode = tc,
+                            Nominal = 1,
+                            Price = 1
+                        }
+                    )
+                )
+            )
+        ).ToList();
+        Enumerable.Range(0, transactions.Count).ToList().ForEach(i => transactions[i].Nominal = i); 
+        Enumerable.Range(0, transactions.Count).ToList().ForEach(i => transactions[i].Price = (double)2*i);
+
+
+
+        dbContext.AddRange(transactions);
+        dbContext.SaveChanges();
+    }
+
     private static void addCategory<TEntity>(PropretteDbContext dbcontext) where TEntity : class, ICategory, new()
     {
         var categories = new List<TEntity>(){
@@ -172,6 +207,4 @@ internal static class DatabaseTestHelper
         dbcontext.AddRange(categories);
         dbcontext.SaveChanges();
     }
-
-
 }

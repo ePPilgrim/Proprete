@@ -15,6 +15,6 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
             t.UserId,
         });
 
-        builder.Property<DateTime>("TS");
+        builder.Property<DateTime>("TimeStamp").HasDefaultValueSql("NOW()");
     }
 }
